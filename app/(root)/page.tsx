@@ -1,3 +1,5 @@
+'use client';
+
 import Navbar from '@/components/nav-bar';
 import HomeSection from './home-section';
 import ProductSection from './product-section';

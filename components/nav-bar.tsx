@@ -97,20 +97,22 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
             </a>
           </div>
           <div className="nav-action w-full justify-end flex">
-            <ul className="nav-menu-container flex gap-4 px-4 py-2">
-              {width >= 1024
-                ? navItems.map((item, index) => (
-                    <li className="nav-item d-none" key={index}>
-                      <a
-                        onClick={() => scrollToSection(`${item.href}`)}
-                        className="nav-link text-white cursor-pointer"
-                      >
-                        {item.label}
-                      </a>
-                    </li>
-                  ))
-                : ''}
-            </ul>
+            {width >= 1024 ? (
+              <ul className="nav-menu-container flex gap-4 px-4 py-2">
+                {navItems.map((item, index) => (
+                  <li className="nav-item d-none" key={index}>
+                    <a
+                      onClick={() => scrollToSection(`${item.href}`)}
+                      className="nav-link text-white cursor-pointer"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              ''
+            )}
             {width >= 1024 ? (
               <Button variant={'secondary'} className="text-xs " size={'sm'}>
                 Daftar
