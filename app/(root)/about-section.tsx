@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Carousel,
   CarouselContent,
@@ -5,6 +7,7 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from '@/components/ui/carousel';
+import { motion } from 'framer-motion';
 
 const abouts = [
   {
@@ -26,16 +29,22 @@ const abouts = [
 
 const AboutSection = () => {
   return (
-    <div className="about-section h-screen flex flex-wrap justify-center content-center px-20">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      id="about-section"
+      className="about-section h-screen flex flex-wrap justify-center content-center px-20"
+    >
       <Carousel className="w-full ">
         <CarouselContent>
           {abouts.map((about, index) => (
             <CarouselItem key={index}>
               <div className="about-card" key={index}>
-                <h2 className="mb-2 text-primary font-semibold text-5xl text-center">
+                <h2 className="mb-2 text-primary font-semibold text-2xl lg:text-5xl text-center">
                   {about.title}
                 </h2>
-                <p className="text-primary font-semibold text-2xl text-center">
+                <p className="text-primary font-semibold text-md lg:text-2xl text-center">
                   {about.content}
                 </p>
               </div>
@@ -45,7 +54,7 @@ const AboutSection = () => {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
-    </div>
+    </motion.div>
   );
 };
 

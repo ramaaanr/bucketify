@@ -10,11 +10,11 @@ export default function Home() {
     <>
       <Navbar
         navItems={[
-          { label: 'Home', href: '/' },
-          { label: 'Produk', href: '/' },
-          { label: 'Cara Kerja', href: '/' },
-          { label: 'Partner', href: '/' },
-          { label: 'Tentang', href: '/' },
+          { label: 'Home', href: 'home-section' },
+          { label: 'Produk', href: 'product-section' },
+          { label: 'Cara Kerja', href: 'work-section' },
+          { label: 'Partner', href: 'partner-section' },
+          { label: 'Tentang', href: 'about-section' },
         ]}
       />
       <HomeSection />

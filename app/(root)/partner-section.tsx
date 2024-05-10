@@ -5,9 +5,15 @@ import { motion } from 'framer-motion';
 
 const PartnerSection = () => {
   return (
-    <div className="partner-section flex h-screen">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      id="partner-section"
+      className="partner-section flex flex-col lg:flex-row  lg:h-screen"
+    >
       <div
-        className="partner-example-container w-full h-full bg-cover"
+        className="partner-example-container w-full h-screen lg:h-full bg-cover"
         style={{ backgroundImage: 'url("/images/hero-bg.jpg")' }}
       >
         <motion.div
@@ -31,8 +37,8 @@ const PartnerSection = () => {
         </motion.div>
       </div>
 
-      <div className="pl-8 partner-invitation-container w-full h-full bg-secondary flex flex-col flex-wrap content-center justify-center">
-        <h2 className="text-7xl mb-4 font-bold text-primary">
+      <div className="pl-8 partner-invitation-container w-full h-screen lg:h-full bg-secondary flex flex-col flex-wrap content-center justify-center">
+        <h2 className="text-4xl lg:text-7xl mb-4 font-bold text-primary">
           Membantu Pelaku <span className="text-white">UMKM</span> dalam usaha
           buket kreativ
         </h2>
@@ -40,7 +46,7 @@ const PartnerSection = () => {
           <Button variant={'outline'}>Bergabung Dengan Kami 👋</Button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

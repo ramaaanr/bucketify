@@ -32,13 +32,21 @@ const ProductSection = () => {
   }, [xTranslation, width]);
 
   return (
-    <div className="product-section  h-screen bg-tertiary flex-col content-center">
-      <div className="my-8 header-container flex justify-end px-20">
-        <h2 className="text-7xl text-primary font-bold">Produk Kami</h2>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      id="product-section"
+      className="product-section  h-screen bg-tertiary flex-col content-center"
+    >
+      <div className="my-8 header-container flex justify-end px-4 lg:px-20">
+        <h2 className="text-4xl lg:text-7xl text-primary font-bold">
+          Produk Kami
+        </h2>
       </div>
-      <div className="my-8 preview-card-container w-full">
+      <div className="my-8 preview-card-container overflow-x-hidden w-full">
         <motion.div
-          className="absoulute left-0 right-0 flex gap-4"
+          className="absoulute left-0 right-0 flex gap-4 py-2"
           style={{ x: xTranslation }}
           ref={ref}
         >
@@ -55,11 +63,15 @@ const ProductSection = () => {
         </motion.div>
       </div>
       <div className="my-8  button-container w-full flex justify-center">
-        <Button variant={'secondary'} size={'lg'} className="text-lg">
+        <Button
+          variant={'secondary'}
+          size={'sm'}
+          className="text-sm lg:text-lg"
+        >
           Lihat Lebih Banyak Produk Kami...
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
