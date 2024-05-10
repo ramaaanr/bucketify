@@ -1,7 +1,9 @@
-import React from 'react';
-import { Button } from './ui/button';
-import { DM_Serif_Display as DSD } from 'next/font/google';
+'use client';
 
+import React, { useState } from 'react';
+import { Button } from './ui/button';
+import { DM_Serif_Display as DSD, Fascinate_Inline } from 'next/font/google';
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 const dsd = DSD({
   weight: ['400'],
   subsets: ['latin'],
@@ -17,8 +19,40 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
+  const navAnimationVariantsValue = {
+    onUp: {
+      y: '0',
+      backgroundImage: `linear-gradient(to bottom right, rgba(107, 114, 128, 0.6), rgba(244, 114, 182, 0.6))`,
+    },
+    onDown: {
+      y: '-100%',
+      backgroundImage: `linear-gradient(to bottom right, rgba(107, 114, 128, 0.6), rgba(244, 114, 182, 0.6))`,
+    },
+    onTop: {
+      y: '0',
+      backgroundImage: `linear-gradient(to bottom right, rgba(107, 114, 128, 0), rgba(244, 114, 182, 0))`,
+    },
+  };
+  const [navAnimationVariants, setNavAnimationVariants] = useState('onTop');
+  const { scrollY } = useScroll();
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const previous = scrollY.getPrevious();
+    if (previous && latest > previous && latest > 150) {
+      // on down
+      setNavAnimationVariants('onDown');
+    } else {
+      if (latest === 0) {
+        setNavAnimationVariants('onTop');
+      } else {
+        setNavAnimationVariants('onUp');
+      }
+    }
+  });
   return (
-    <nav
+    <motion.nav
+      variants={navAnimationVariantsValue}
+      transition={{ duration: 0.35, ease: 'easeInOut' }}
+      animate={navAnimationVariants}
       className="navbar navbar-expand-lg navbar-light 
      py-3 px-10 fixed top-0 left-0 right-0 z-10 "
     >
@@ -35,7 +69,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
           <ul className="nav-menu-container flex gap-4 px-4 py-2">
             {navItems.map((item, index) => (
               <li className="nav-item " key={index}>
-                <a href={item.href} className="nav-link text-secondary ">
+                <a href={item.href} className="nav-link text-white ">
                   {item.label}
                 </a>
               </li>
@@ -46,7 +80,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
           </Button>
         </div>
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 

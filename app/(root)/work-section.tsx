@@ -1,5 +1,7 @@
-import { CreditCard, Flower2, PackageCheck, UserRoundPlus } from 'lucide-react';
+'use client';
 
+import { motion } from 'framer-motion';
+import { CreditCard, Flower2, PackageCheck, UserRoundPlus } from 'lucide-react';
 const WorkSection = () => {
   return (
     <div className="work-section bg-white h-screen px-20 flex-col content-center">
@@ -10,31 +12,43 @@ const WorkSection = () => {
       </div>
       <div className="my-16 how-works-container w-full">
         <ul className="work-list flex w-full justify-evenly">
-          <li className="work-item flex flex-wrap flex-col">
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className="work-item flex flex-wrap flex-col cursor-pointer"
+          >
             <UserRoundPlus className="self-center" color="#372948" size={120} />
             <p className="text-primary font-semibold text-2xl">
               Daftarkan Akun Anda
             </p>
-          </li>{' '}
-          <li className="work-item flex flex-col ">
+          </motion.li>{' '}
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className=" cursor-pointer work-item flex flex-col "
+          >
             <Flower2 className="self-center" color="#372948" size={120} />
             <p className="text-primary font-semibold text-2xl">
               Cari & Pilih Buket Kami
             </p>
-          </li>{' '}
-          <li className="work-item flex flex-col ">
+          </motion.li>{' '}
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className=" cursor-pointer work-item flex flex-col "
+          >
             <CreditCard className="self-center" color="#372948" size={120} />
 
             <p className="text-primary font-semibold text-2xl">
               Pemesanan & Pembayaran
             </p>
-          </li>{' '}
-          <li className="work-item flex flex-col ">
+          </motion.li>{' '}
+          <motion.li
+            whileHover={{ scale: 1.1 }}
+            className=" cursor-pointer work-item flex flex-col "
+          >
             <PackageCheck className="self-center" color="#372948" size={120} />
             <p className="text-primary font-semibold text-2xl">
               Pengambilan Buket
             </p>
-          </li>
+          </motion.li>
         </ul>
       </div>
     </div>

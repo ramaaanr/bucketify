@@ -22,7 +22,7 @@ export default function Home() {
       <WorkSection />
       <PartnerSection />
       <AboutSection />
-      <footer className="w-full bg-secondary pl-2 text-xs py-2">
+      <footer className="w-full bg-secondary pl-2 text-xs py-2 text-white">
         © Kadobu 2024, All rights reserved
       </footer>
     </>

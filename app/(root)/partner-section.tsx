@@ -1,5 +1,7 @@
+'use client';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 
 const PartnerSection = () => {
   return (
@@ -8,8 +10,14 @@ const PartnerSection = () => {
         className="partner-example-container w-full h-full bg-cover"
         style={{ backgroundImage: 'url("/images/hero-bg.jpg")' }}
       >
-        <div className="opacity-layer bg-pink-200 bg-opacity-50 h-full w-full flex flex-wrap justify-center content-center">
-          <div className="content flex">
+        <motion.div
+          whileHover={{ backgroundColor: 'rgba(251, 207, 232, 0.5)' }} // Mengubah background-color menjadi pink saat dihover
+          className="opacity-layer  h-full w-full flex flex-wrap justify-center content-center"
+        >
+          <motion.div
+            whileHover={{ scale: 1.1 }}
+            className="content flex flex-wrap justify-center content-center w-full h-full"
+          >
             <Avatar className="h-40 w-40">
               <AvatarImage src="/images/partner-example-avatar.png" />
             </Avatar>
@@ -19,8 +27,8 @@ const PartnerSection = () => {
                 Banjarbaru, Dahlina Raya
               </p>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
 
       <div className="pl-8 partner-invitation-container w-full h-full bg-secondary flex flex-col flex-wrap content-center justify-center">

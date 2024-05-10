@@ -26,6 +26,8 @@
     --radius: 0.5rem;
     --tertiary: 351 100% 96%;
     --tertiary-foreground: 210 20% 98%;
+    --color-slate-400: #6b7280;
+    --color-pink-400: #f472b6;
   }
 
   .dark {
