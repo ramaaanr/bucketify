@@ -4,8 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { DM_Serif_Display as DSD, Fascinate_Inline } from 'next/font/google';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import useWindowDimensions from '@/hooks/use-window-dimensions';
 import { Menu, X } from 'lucide-react';
+import {
+  SignedOut,
+  SignInButton,
+  SignedIn,
+  UserButton,
+  RedirectToSignUp,
+} from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 const dsd = DSD({
   weight: ['400'],
   subsets: ['latin'],
@@ -21,7 +28,20 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
-  const { width } = useWindowDimensions();
+  const router = useRouter();
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const [isSidebarShowed, setIsSidebarShowed] = useState(false);
   const navAnimationVariantsValue = {
     onUp: {
@@ -47,7 +67,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
   useEffect(() => {
     if (width >= 1024) {
       setIsSidebarShowed(false);
-      setNavAnimationVariants('onUp');
+      setNavAnimationVariants('onTop');
     } else {
       setNavAnimationVariants('onMobile');
     }
@@ -114,9 +134,16 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
               ''
             )}
             {width >= 1024 ? (
-              <Button variant={'secondary'} className="text-xs " size={'sm'}>
-                Daftar
-              </Button>
+              <>
+                <SignedOut>
+                  <Button
+                    variant={'secondary'}
+                    onClick={() => router.push('/sign-up')}
+                  >
+                    Daftar
+                  </Button>
+                </SignedOut>
+              </>
             ) : (
               <Button
                 variant={'ghost'}
@@ -137,14 +164,15 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
       </motion.nav>
       <motion.aside
         initial={'hidden'}
-        variants={{ hidden: { top: '-300px' }, visible: { top: '64px' } }}
+        variants={{ hidden: { top: '-450px' }, visible: { top: '64px' } }}
         animate={isSidebarShowed ? 'visible' : 'hidden'}
         transition={{ duration: '0.25', ease: 'easeInOut' }}
         className="sidebar fixed left-0 right-0 z-10 bg-primary"
       >
         <ul className="nav-menu-container flex flex-col px-4 py-2 gap-y-6">
-          {width < 1024
-            ? navItems.map((item, index) => (
+          {width < 1024 ? (
+            <>
+              {navItems.map((item, index) => (
                 <li className="nav-item w-full " key={index}>
                   <Button
                     onClick={() => scrollToSection(`${item.href}`)}
@@ -153,8 +181,25 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                     {item.label}
                   </Button>
                 </li>
-              ))
-            : ''}
+              ))}
+              <SignedOut>
+                <li className="nav-item w-full ">
+                  <Button
+                    variant={'secondary'}
+                    onClick={() => router.push('/sign-up')}
+                    className="nav-link text-white block text-center w-full "
+                  >
+                    Daftar
+                  </Button>
+                </li>
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </>
+          ) : (
+            ''
+          )}
         </ul>
       </motion.aside>
     </>
