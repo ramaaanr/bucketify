@@ -9,7 +9,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: 'Bucketify',
+  title: 'Kadobu',
   description: 'Web Application for selling bouquet',
 };
 

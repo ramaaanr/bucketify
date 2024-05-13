@@ -11,19 +11,19 @@ import { motion } from 'framer-motion';
 
 const abouts = [
   {
-    title: 'Selamat Datang di Bucketify',
+    title: 'Selamat Datang di Kadobu',
     content:
-      'Bucketify lahir dari hasrat kami untuk memberdayakan pelaku UMKM dalam industri kreatif, khususnya para pengusaha buket. Kami percaya bahwa setiap karya memiliki cerita, dan setiap pengusaha berbakat layak untuk diperhatikan.',
+      'Kadobu lahir dari hasrat kami untuk memberdayakan pelaku UMKM dalam industri kreatif, khususnya para pengusaha buket. Kami percaya bahwa setiap karya memiliki cerita, dan setiap pengusaha berbakat layak untuk diperhatikan.',
   },
   {
-    title: 'Mengapa Bucketify?',
+    title: 'Mengapa Kadobu?',
     content:
-      'Kami memahami bahwa mengelola bisnis buket kreatif tidak selalu mudah. Dari mencari bahan baku berkualitas hingga menjangkau pasar yang tepat, setiap langkah memiliki tantangan sendiri. Di Bucketify, kami berkomitmen untuk membantu Anda melewati setiap tahap perjalanan bisnis Anda dengan dukungan teknologi terkini.',
+      'Kami memahami bahwa mengelola bisnis buket kreatif tidak selalu mudah. Dari mencari bahan baku berkualitas hingga menjangkau pasar yang tepat, setiap langkah memiliki tantangan sendiri. Di Kadobu, kami berkomitmen untuk membantu Anda melewati setiap tahap perjalanan bisnis Anda dengan dukungan teknologi terkini.',
   },
   {
     title: 'Apa yang Kami Tawarkan?',
     content:
-      'Dengan Bucketify, Anda tidak hanya mendapatkan platform jual beli yang andal, tetapi juga alat pengelolaan usaha yang lengkap. Dari manajemen inventaris hingga pelacakan pesanan, kami menyediakan solusi yang intuitif dan efisien agar Anda dapat fokus pada apa yang Anda cintai: menciptakan buket indah untuk pelanggan Anda.',
+      'Dengan Kadobu, Anda tidak hanya mendapatkan platform jual beli yang andal, tetapi juga alat pengelolaan usaha yang lengkap. Dari manajemen inventaris hingga pelacakan pesanan, kami menyediakan solusi yang intuitif dan efisien agar Anda dapat fokus pada apa yang Anda cintai: menciptakan buket indah untuk pelanggan Anda.',
   },
 ];
 

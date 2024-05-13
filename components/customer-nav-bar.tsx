@@ -48,7 +48,7 @@ const Navbar = () => {
         <div className="nav-content-container flex gap-x-8">
           <div className="nav-logo w-fit">
             <a className={`${dsd.className} text-3xl text-secondary`} href="/">
-              Bucketify
+              Kadobu
             </a>
           </div>
           <Input type="text" placeholder="Cari" className="w-full" />

@@ -113,7 +113,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
               className={`${dsd.className} text-3xl text-white text-secondary`}
               href="/"
             >
-              Bucketify
+              Kadobu
             </a>
           </div>
           <div className="nav-action w-full justify-end flex">
