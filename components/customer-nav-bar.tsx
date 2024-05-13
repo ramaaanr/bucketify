@@ -43,10 +43,10 @@ const Navbar = () => {
     <>
       <motion.nav
         className="navbar navbar-expand-lg navbar-light  
-     pl-24 pr-6 py-4  lg:px-10 fixed top-0 left-0 right-0 z-20 "
+     pl-6 lg:pl-24 pr-6 py-4  fixed top-0 left-0 right-0 z-20 "
       >
-        <div className="nav-content-container flex gap-x-8">
-          <div className="nav-logo w-fit">
+        <div className="nav-content-container flex gap-x-2 sm:gap-x-4 md:gap-x-8">
+          <div className="nav-logo w-fit hidden md:block">
             <a className={`${dsd.className} text-3xl text-secondary`} href="/">
               Kadobu
             </a>
