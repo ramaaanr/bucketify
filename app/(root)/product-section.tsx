@@ -4,6 +4,8 @@ import PreviewCard from '@/components/preview-card';
 import { Button } from '@/components/ui/button';
 import PreviewCardProps from '@/props/PreviewCardProps';
 import { motion, animate, useMotionValue } from 'framer-motion';
+import { useRouter } from 'next/navigation';
+
 import { useEffect } from 'react';
 import useMeasure from 'react-use-measure';
 const previewProducts: PreviewCardProps[] = [
@@ -15,6 +17,7 @@ const previewProducts: PreviewCardProps[] = [
 ];
 
 const ProductSection = () => {
+  const router = useRouter();
   let [ref, { width }] = useMeasure();
   const xTranslation = useMotionValue(0);
   useEffect(() => {
@@ -64,6 +67,7 @@ const ProductSection = () => {
       </div>
       <div className="my-8  button-container w-full flex justify-center">
         <Button
+          onClick={() => router.push('/catalogue')}
           variant={'secondary'}
           size={'sm'}
           className="text-sm lg:text-lg"

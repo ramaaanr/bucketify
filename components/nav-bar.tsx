@@ -143,6 +143,9 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                     Daftar
                   </Button>
                 </SignedOut>
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
               </>
             ) : (
               <Button
@@ -183,7 +186,7 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                 </li>
               ))}
               <SignedOut>
-                <li className="nav-item w-full ">
+                <li className="nav-item w-full">
                   <Button
                     variant={'secondary'}
                     onClick={() => router.push('/sign-up')}
@@ -194,7 +197,9 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                 </li>
               </SignedOut>
               <SignedIn>
-                <UserButton />
+                <li className="nav-item w-full text-center">
+                  <UserButton />
+                </li>
               </SignedIn>
             </>
           ) : (

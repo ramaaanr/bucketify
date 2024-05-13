@@ -1,4 +1,11 @@
+import Navbar from '@/components/customer-nav-bar';
+import UnderConstructionWarning from '@/components/under-construction-warning';
 const Page = () => {
-  return <h1>test</h1>;
+  return (
+    <>
+      <Navbar />
+      <UnderConstructionWarning />
+    </>
+  );
 };
 export default Page;

@@ -3,8 +3,10 @@
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 const HomeSection = () => {
+  const router = useRouter();
   return (
     <motion.div
       id="home-section"
@@ -37,7 +39,12 @@ const HomeSection = () => {
           <div className="image-container w-full"></div>
         </div>
         <div className="button-container w-full flex mt-8 gap-4 justify-center">
-          <Button variant={'secondary'}>Produk Kami</Button>
+          <Button
+            variant={'secondary'}
+            onClick={() => router.push('/catalogue')}
+          >
+            Produk Kami
+          </Button>
           <Button variant={'ghost'} className="text-white">
             Cara Kerja
           </Button>
