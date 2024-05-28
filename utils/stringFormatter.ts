@@ -1,11 +1,13 @@
 const rupiahFormatter = (amount: number): string => {
+  if (typeof amount == 'undefined') {
+    return 'Rp0';
+  }
   const formattedAmount = amount.toLocaleString('id-ID', {
     style: 'currency',
     currency: 'IDR',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   });
-
   return formattedAmount.replace('IDR', 'Rp').trim();
 };
 

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DM_Serif_Display as DSD, Fascinate_Inline } from 'next/font/google';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { ScrollText } from 'lucide-react';
+import { ScrollText, Search } from 'lucide-react';
 import { SignedOut, SignedIn, UserButton } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import {
@@ -13,7 +13,7 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-} from '@radix-ui/react-tooltip';
+} from '@/components/ui/tooltip';
 const dsd = DSD({
   weight: ['400'],
   subsets: ['latin'],
@@ -23,6 +23,7 @@ const Navbar = () => {
   const router = useRouter();
   const [width, setWidth] = useState(window.innerWidth);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
+  const [search, setSearch] = useState('');
   useEffect(() => {
     const handleResize = () => {
       setWidth(window.innerWidth);
@@ -51,7 +52,21 @@ const Navbar = () => {
               Kadobu
             </a>
           </div>
-          <Input type="text" placeholder="Cari" className="w-full" />
+          <div className="relative w-full flex-1">
+            <button
+              className="absolute left-2.5 top-2.5 text-muted-foreground"
+              onClick={() => router.push(`/catalogue?cari=${search}`)}
+            >
+              <Search size={16} />
+            </button>
+            <Input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              type="search"
+              placeholder="Search..."
+              className="w-full rounded-lg bg-background pl-8"
+            />
+          </div>
           <div className="nav-action w-fit justify-end flex  gap-x-2">
             <TooltipProvider>
               <Tooltip>
@@ -60,11 +75,7 @@ const Navbar = () => {
                     <ScrollText size={24} color="#372948" />
                   </Button>
                 </TooltipTrigger>
-                <TooltipContent>
-                  <div className="rounded-sm bg-white border border-gray-200 py-1 px-2 mt-2 text-xs">
-                    Pesanan Anda
-                  </div>
-                </TooltipContent>
+                <TooltipContent>Pesanan Anda</TooltipContent>
               </Tooltip>
             </TooltipProvider>
 

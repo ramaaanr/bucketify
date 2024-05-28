@@ -6,22 +6,55 @@ import _ from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from './ui/badge';
+import { Skeleton } from './ui/skeleton';
 
-const ProductCard: React.FC<ProductCardProps> = ({
+const ProductCard: React.FC<any> = ({
+  isLoading,
   nama_produk,
   harga_produk,
   nama_toko,
   kode_produk,
   foto_produk,
   status_produk,
+  id_toko,
 }) => {
+  // const api = process.env.NEXT_PUBLIC_API_URL;
+  console.log(`${process.env.NEXT_PUBLIC_API_URL}/katalogs/${kode_produk}`);
+  console.log();
+  if (isLoading)
+    return (
+      <>
+        <motion.div
+          whileHover={{ y: -4 }}
+          className="product-card rounded-lg w-[210px]"
+        >
+          <Link href={isLoading ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
+            <div className="image-container relative w-[210px] h-[280px] ">
+              <Skeleton className="w-full h-full rounded-lg" />
+            </div>
+
+            <div className="text-container flex flex-col mt-2 gap-y-2">
+              <Skeleton className="w-full h-5" />
+              <Skeleton className="w-3/4 h-4" />
+              <div className="product-store-container flex items-center">
+                <Skeleton className=" w-1/3 h-2" />
+              </div>
+              <div className="product-price text-lg font-semibold text-secondary">
+                <Skeleton className="w-1/2 h-4" />
+              </div>
+            </div>
+          </Link>
+        </motion.div>
+      </>
+    );
+
   return (
     <>
       <motion.div
         whileHover={{ y: -4 }}
         className="product-card rounded-lg w-[210px]"
       >
-        <Link href={`/catalogue/${nama_toko}/${kode_produk}`}>
+        <Link href={isLoading ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
           <div className="image-container relative w-[210px] h-[280px] ">
             <Badge
               variant={
@@ -33,7 +66,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </Badge>
             <Image
               className="rounded-lg"
-              src={`http://localhost:3002/product_images/${foto_produk}`}
+              src={`${process.env.NEXT_PUBLIC_API_URL}/product_images/${foto_produk}`}
               alt="Logo"
               fill
               objectFit="cover"
