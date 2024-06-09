@@ -1,7 +1,11 @@
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const product_code = searchParams.get('product_code');
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/katalogs/`, {
+import { API_KATALOG, API_KEY, HEADERS } from '@/config/kadobu-api';
+
+export async function GET(
+  request: Request,
+  { params }: { params: { product_code: string } },
+) {
+  const res = await fetch(`${API_KATALOG}/${params.product_code}`, {
+    headers: HEADERS,
     cache: 'no-cache',
   });
   const data = await res.json();

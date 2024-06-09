@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DM_Serif_Display as DSD, Fascinate_Inline } from 'next/font/google';
 import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { ScrollText, Search } from 'lucide-react';
+import { Gift, ScrollText, Search } from 'lucide-react';
 import { SignedOut, SignedIn, UserButton } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import {
@@ -71,11 +71,29 @@ const Navbar = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant={'ghost'} size={'icon'}>
+                  <Button
+                    variant={'ghost'}
+                    size={'icon'}
+                    onClick={() => router.push('/orders')}
+                  >
                     <ScrollText size={24} color="#372948" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>Pesanan Anda</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={'ghost'}
+                    size={'icon'}
+                    onClick={() => router.push('/catalogue')}
+                  >
+                    <Gift size={24} color="#372948" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Katalog</TooltipContent>
               </Tooltip>
             </TooltipProvider>
 
@@ -88,6 +106,12 @@ const Navbar = () => {
                 onClick={() => router.push('/sign-up')}
               >
                 Daftar
+              </Button>
+              <Button
+                variant={'outline'}
+                onClick={() => router.push('/sign-in')}
+              >
+                Masuk
               </Button>
             </SignedOut>
           </div>

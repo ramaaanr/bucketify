@@ -136,12 +136,20 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
             {width >= 1024 ? (
               <>
                 <SignedOut>
-                  <Button
-                    variant={'secondary'}
-                    onClick={() => router.push('/sign-up')}
-                  >
-                    Daftar
-                  </Button>
+                  <div className="button-auth-container flex gap-x-2">
+                    <Button
+                      variant={'secondary'}
+                      onClick={() => router.push('/sign-up')}
+                    >
+                      Daftar
+                    </Button>
+                    <Button
+                      variant={'outline'}
+                      onClick={() => router.push('/sign-in')}
+                    >
+                      Masuk
+                    </Button>
+                  </div>
                 </SignedOut>
                 <SignedIn>
                   <UserButton />
@@ -186,13 +194,20 @@ const Navbar: React.FC<NavbarProps> = ({ navItems }) => {
                 </li>
               ))}
               <SignedOut>
-                <li className="nav-item w-full">
+                <li className="nav-item w-full space-y-2">
                   <Button
                     variant={'secondary'}
                     onClick={() => router.push('/sign-up')}
                     className="nav-link text-white block text-center w-full "
                   >
                     Daftar
+                  </Button>
+                  <Button
+                    variant={'outline'}
+                    onClick={() => router.push('/sign-in')}
+                    className="nav-link text-white block text-center w-full "
+                  >
+                    Masuk
                   </Button>
                 </li>
               </SignedOut>

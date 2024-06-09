@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Toaster } from '@/components/ui/toaster';
 import { Inter, Poppins } from 'next/font/google'; // Menggunakan Poppins sebagai pengganti Inter
 import './globals.css';
 import { ClerkProvider } from '@clerk/nextjs';
@@ -23,6 +24,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`${poppins.className} overflow-x-hidden`}>
           {children}
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>

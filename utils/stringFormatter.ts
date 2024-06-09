@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const rupiahFormatter = (amount: number): string => {
   if (typeof amount == 'undefined') {
     return 'Rp0';
@@ -20,4 +22,10 @@ const shortenProductName = (name: string): string => {
   }
 };
 
-export { rupiahFormatter, shortenProductName };
+const dateFormatter = (date: string): string => {
+  moment.locale('id'); // Set locale globally
+  const tanggal = moment(date);
+  return tanggal.format('LL');
+};
+
+export { rupiahFormatter, shortenProductName, dateFormatter };
