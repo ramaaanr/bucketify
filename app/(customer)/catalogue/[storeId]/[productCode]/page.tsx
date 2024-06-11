@@ -1,6 +1,5 @@
 'use client';
 
-import useSnap from '@/hooks/useSnap';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -13,7 +12,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
-import { API_ORDER, HEADERS } from '@/config/kadobu-api';
 import { rupiahFormatter } from '@/utils/stringFormatter';
 import { useAuth } from '@clerk/nextjs';
 import _ from 'lodash';
@@ -21,6 +19,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from '@/components/ui/drawer';
+import { MinusIcon, PlusIcon } from 'lucide-react';
+import { Label } from '@/components/ui/label';
 
 interface Product {
   nama_produk: string;
@@ -45,7 +55,8 @@ const Page = ({ params }: { params: Params }) => {
   const { isLoaded, userId } = useAuth();
   const { storeId, productCode } = params;
   const [product, setProduct] = useState<Product | null>(null);
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [price, setPrice] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,12 +65,12 @@ const Page = ({ params }: { params: Params }) => {
       });
 
       if (!res.ok) {
-        // This will activate the closest `error.js` Error Boundary
         throw new Error('Failed to fetch data');
       }
 
-      const result = await res.json();
-      setProduct(result.data);
+      const { data } = await res.json();
+      setProduct(data);
+      setPrice(data.harga_produk);
     };
 
     fetchData();
@@ -193,22 +204,95 @@ const Page = ({ params }: { params: Params }) => {
           <p className="text-4xl font-bold">
             {rupiahFormatter(product.harga_produk)}
           </p>
-          <div className="action-container flex gap-x-2">
-            <Button onClick={orderButton} className="w-1/2">
-              Buat Pesanan
-            </Button>
-            <Input
-              onChange={(e) => setQuantity(Number(e.target.value))}
-              value={quantity}
-              className="w-1/2"
-              min={1}
-              max={100}
-              type="number"
-              placeholder="Jumlah"
-            />
-          </div>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button>Buat Pesanan</Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>Checkout Pesanan Anda</DrawerTitle>
+                  <DrawerDescription>
+                    Isi Jumlah Pesanan terlebih dahulu
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="counter-containe w-full mt-4 p-4 flex">
+                  <div className="w-full quantity-container">
+                    <Label>Total Pesanan</Label>
+                    <div className="pesanan-button-container flex gap-x-2">
+                      <Button
+                        onClick={() => {
+                          const newQuantity = quantity + 1;
+                          if (product) {
+                            if (product.stok_produk < newQuantity) {
+                              toast({
+                                variant: 'destructive',
+                                description:
+                                  'Total pesanan tidak boleh lebih dari stok',
+                              });
+                            } else {
+                              setQuantity(newQuantity);
+                              const sum = newQuantity * product.harga_produk;
+                              setPrice(sum);
+                            }
+                          }
+                        }}
+                        disabled={!product}
+                        size={'icon-sm'}
+                        variant={'outline'}
+                      >
+                        <PlusIcon size={16} />
+                      </Button>
+                      <Input
+                        className="w-16 h-6"
+                        type="number"
+                        value={quantity}
+                        disabled
+                      ></Input>
+                      <Button
+                        onClick={() => {
+                          const newQuantity = quantity - 1;
+                          if (product) {
+                            if (0 >= newQuantity) {
+                              toast({
+                                variant: 'destructive',
+                                description:
+                                  'Total pesanan tidak boleh kurang dari 0',
+                              });
+                            } else {
+                              setQuantity(newQuantity);
+                              const sum = newQuantity * product.harga_produk;
+                              setPrice(sum);
+                            }
+                          }
+                        }}
+                        disabled={!product}
+                        size={'icon-sm'}
+                        variant={'outline'}
+                      >
+                        <MinusIcon size={16} />
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="w-full price-container">
+                    <Label>Total Harga</Label>
+                    <p className="text-2xl font-bold">
+                      {rupiahFormatter(price)}
+                    </p>
+                  </div>
+                </div>
+                <DrawerFooter>
+                  <Button onClick={orderButton}>Bayar</Button>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Cancel</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </div>
+            </DrawerContent>
+          </Drawer>
           <p className="text-gray-600 text-sm">{product.deskripsi_produk}</p>
         </div>
+
         <div id="snap-container"></div>
       </div>
     </>

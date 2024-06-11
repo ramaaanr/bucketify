@@ -96,6 +96,7 @@ const Page = () => {
                     <SelectItem value="CANCELED">gagal</SelectItem>
                     <SelectItem value="PENDING">belum bayar</SelectItem>
                     <SelectItem value="ON_PROGRESS">diproses</SelectItem>
+                    <SelectItem value="READY">Siap Diambil</SelectItem>
                     <SelectItem value="COMPLETED">selesai</SelectItem>
                   </SelectGroup>
                 </SelectContent>
