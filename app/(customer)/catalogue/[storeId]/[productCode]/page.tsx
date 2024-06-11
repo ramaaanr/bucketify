@@ -31,6 +31,7 @@ import {
 } from '@/components/ui/drawer';
 import { MinusIcon, PlusIcon } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+import { STORE_IMAGES } from '@/config/kadobu-api';
 
 interface Product {
   nama_produk: string;
@@ -41,6 +42,7 @@ interface Product {
   nama_toko: string;
   id_toko: string;
   alamat_toko: string;
+  foto_profil: string;
   foto_produk: string;
 }
 
@@ -188,19 +190,22 @@ const Page = ({ params }: { params: Params }) => {
           <p className="text-xs text-gray-500">
             {`Stok Produk: ${product.stok_produk}`}
           </p>
-          <div className="store-container flex flex-wrap items-center gap-x-2 px-2">
+          <Link
+            href={`/catalogue/${product.id_toko}`}
+            className="store-container flex flex-wrap items-center gap-x-2 px-2 rounded-lg hover:bg-gray-100 py-2"
+          >
             <Avatar className="h-10 w-10">
               <AvatarImage
-                src="/images/partner-example-avatar.png"
+                src={`${STORE_IMAGES}/${product.foto_profil}`}
                 alt="@shadcn"
               />
-              <AvatarFallback>CN</AvatarFallback>
+              <AvatarFallback>{product.nama_toko}</AvatarFallback>
             </Avatar>
-            <div className="store-detail-container">
-              <p className="font-medium text-sm">{product.nama_toko}</p>
-              <p className="text-gray-500 text-sm">{product.alamat_toko}</p>
+            <div className="sstore-detail ">
+              <p className="text-xl font-semibold">{product.nama_toko}</p>
+              <p className="text-xs">{product.alamat_toko}</p>
             </div>
-          </div>
+          </Link>
           <p className="text-4xl font-bold">
             {rupiahFormatter(product.harga_produk)}
           </p>

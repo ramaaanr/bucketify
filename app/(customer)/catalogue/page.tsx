@@ -11,9 +11,8 @@ import {
   BreadcrumbLink,
 } from '@/components/ui/breadcrumb';
 import ProductCardProps from '@/props/ProductCardProps';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { HEADERS } from '@/config/kadobu-api';
 
 const Page = () => {
   const searchParams = useSearchParams();
