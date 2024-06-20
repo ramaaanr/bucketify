@@ -8,8 +8,8 @@ const CustomerLayout = ({
   return (
     <>
       <Navbar />
-      <div className="spacing mt-16"></div>
-      <div className="main-container pl-6 lg:pl-24 mt-16">{children}</div>
+      <div className="spacing md:mt-16"></div>
+      <div className="main-container ">{children}</div>
     </>
   );
 };

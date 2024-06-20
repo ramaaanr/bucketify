@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Badge } from './ui/badge';
 import { Skeleton } from './ui/skeleton';
+import { Store } from 'lucide-react';
 
 const ProductCard: React.FC<any> = ({
   isLoading,
@@ -17,19 +18,17 @@ const ProductCard: React.FC<any> = ({
   foto_produk,
   status_produk,
   id_toko,
+  alamat_toko,
 }) => {
-  // const api = process.env.NEXT_PUBLIC_API_URL;
-  console.log(`${process.env.NEXT_PUBLIC_API_URL}/katalogs/${kode_produk}`);
-  console.log();
   if (isLoading)
     return (
       <>
         <motion.div
           whileHover={{ y: -4 }}
-          className="product-card rounded-lg w-[210px]"
+          className="product-card rounded-lg  w-[150px] md:w-[210px] "
         >
           <Link href={isLoading ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
-            <div className="image-container relative w-[210px] h-[280px] ">
+            <div className="image-container relative w-[150px] h-[200px] md:w-[210px]  md:h-[280px]  ">
               <Skeleton className="w-full h-full rounded-lg" />
             </div>
 
@@ -52,10 +51,10 @@ const ProductCard: React.FC<any> = ({
     <>
       <motion.div
         whileHover={{ y: -4 }}
-        className="product-card rounded-lg w-[210px]"
+        className="product-card rounded-lg w-[150px] md:w-[210px]"
       >
         <Link href={isLoading ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
-          <div className="image-container relative w-[210px] h-[280px] ">
+          <div className="image-container relative w-[150px] h-[200px] md:w-[210px]  md:h-[280px]  ">
             <Badge
               variant={
                 _.includes(status_produk, 'Ready') ? 'highlight' : 'default'
@@ -75,21 +74,29 @@ const ProductCard: React.FC<any> = ({
           </div>
 
           <div className="text-container px-2">
-            <p className="product-name font-semibold h-12">
-              {shortenProductName(nama_produk)}
-            </p>
-            <div className="product-store-container flex items-center">
+            <div className="product-store-container mt-2 flex items-center">
               <Image
                 width={16}
                 height={16}
                 src={'/images/flower-sho-icon.png'}
                 alt="shop-icon"
               />
-              <p className="product-store text-gray-500 text-xs">{nama_toko}</p>
+              <p className="product-store font-semibold text-primary text-xs">
+                {nama_toko}
+              </p>
             </div>
-            <p className="product-price text-lg font-semibold text-secondary">
+            <p className="product-name  text-gray-500 text-xs">
+              {shortenProductName(nama_produk)}
+            </p>
+            <p className="product-price text-lg mb-0 font-semibold text-secondary">
               {rupiahFormatter(harga_produk)}
             </p>
+            <div className="product-address-container flex items-center">
+              <Store size={12} color="#372947" />
+              <p className="ml-1 product-address  text-gray-500 text-xs">
+                {shortenProductName(alamat_toko)}
+              </p>
+            </div>
           </div>
         </Link>
       </motion.div>

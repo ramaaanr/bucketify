@@ -29,9 +29,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { MinusIcon, PlusIcon } from 'lucide-react';
+import { MinusIcon, Notebook, NotebookPen, PlusIcon } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { STORE_IMAGES } from '@/config/kadobu-api';
+import { Textarea } from '@/components/ui/textarea';
 
 interface Product {
   nama_produk: string;
@@ -59,6 +60,7 @@ const Page = ({ params }: { params: Params }) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [price, setPrice] = useState(0);
+  const [note, setNote] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,6 +106,7 @@ const Page = ({ params }: { params: Params }) => {
       kodeProduk: productCode,
       keterangan: 'Menunggu Pembayaran',
       totalPesanan: quantity.toString(),
+      catatan: note || ' ',
     };
 
     const response = await fetch(`/api/orders`, {
@@ -221,7 +224,7 @@ const Page = ({ params }: { params: Params }) => {
                     Isi Jumlah Pesanan terlebih dahulu
                   </DrawerDescription>
                 </DrawerHeader>
-                <div className="counter-containe w-full mt-4 p-4 flex">
+                <div className="counter-container w-full mt-4 p-4 flex">
                   <div className="w-full quantity-container">
                     <Label>Total Pesanan</Label>
                     <div className="pesanan-button-container flex gap-x-2">
@@ -285,6 +288,17 @@ const Page = ({ params }: { params: Params }) => {
                       {rupiahFormatter(price)}
                     </p>
                   </div>
+                </div>
+                <div className="px-4">
+                  <div className="flex pb-2">
+                    <NotebookPen size={16} />
+                    <p className="text-xs ml-1 font-semibold">Catatan</p>
+                  </div>
+                  <Textarea
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    className="resize-none"
+                  />
                 </div>
                 <DrawerFooter>
                   <Button onClick={orderButton}>Bayar</Button>

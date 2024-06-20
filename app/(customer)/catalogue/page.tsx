@@ -13,6 +13,9 @@ import {
 import ProductCardProps from '@/props/ProductCardProps';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import CategoryContainer from '@/components/templates/category-container';
+import { Separator } from '@/components/ui/separator';
+import BannerCarousel from '@/components/templates/banner-carousel';
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -27,19 +30,22 @@ const Page = () => {
         let res;
         const cari = searchParams.get('cari');
         if (cari) {
-          res = await fetch(`/api/catalogs?cari=${cari}`);
+          res = await fetch(`/api/catalogs?cari=${cari}`, {
+            cache: 'force-cache',
+          });
           setSearch(cari);
         } else {
           setSearch(null);
           res = await fetch('/api/catalogs');
         }
         if (!res.ok) {
-          throw new Error('Failed to fetch data');
+          return new Error('Halaman Utama Bermasalah');
         }
         const result = await res.json();
         setData(result.data);
       } catch (err: any) {
         setError(err.message);
+        throw Error('Halaman Utama Bermasalah');
       } finally {
         setLoading(false);
       }
@@ -52,26 +58,33 @@ const Page = () => {
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink>
-              <Link href="/catalogue">Katalog Produk</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          {search ? (
-            <>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage>{search}</BreadcrumbPage>
-              </BreadcrumbItem>
-            </>
-          ) : (
-            ''
-          )}
-        </BreadcrumbList>
-      </Breadcrumb>
-      <ul className="grid grid-cols-5 gap-y-4 p-4">
+      <div className="py-4 px-8 sm:px-16 md:px-28 lg:px-32">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link href="/catalogue">Katalog Produk</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            {search ? (
+              <>
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>{search}</BreadcrumbPage>
+                </BreadcrumbItem>
+              </>
+            ) : (
+              ''
+            )}
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      <BannerCarousel />
+      <CategoryContainer />
+      <div className="w-full px-8">
+        <Separator className="w-full md:hidden my-2" />
+      </div>
+      <div className="grid grid-cols-2 mt-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-4 w-fit mx-auto">
         {loading ? (
           <>
             {Array(10)
@@ -93,11 +106,12 @@ const Page = () => {
                 nama_toko={product.nama_toko}
                 status_produk={product.status_produk}
                 id_toko={product.id_toko}
+                alamat_toko={product.alamat_toko}
               />
             ))}
           </>
         )}
-      </ul>
+      </div>
     </>
   );
 };

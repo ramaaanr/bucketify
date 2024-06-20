@@ -14,7 +14,7 @@ const rupiahFormatter = (amount: number): string => {
 };
 
 const shortenProductName = (name: string): string => {
-  const maxLength = 35;
+  const maxLength = 25;
   if (name.length > maxLength) {
     return name.substring(0, maxLength) + '...';
   } else {
