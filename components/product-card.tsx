@@ -1,5 +1,5 @@
 'use client';
-import ProductCardProps from '@/props/ProductCardProps';
+import React from 'react';
 import { rupiahFormatter, shortenProductName } from '@/utils/stringFormatter';
 import { motion } from 'framer-motion';
 import _ from 'lodash';
@@ -9,7 +9,20 @@ import { Badge } from './ui/badge';
 import { Skeleton } from './ui/skeleton';
 import { Store } from 'lucide-react';
 
-const ProductCard: React.FC<any> = ({
+interface ProductCardProps {
+  isLoading?: boolean;
+  nama_produk: string;
+  harga_produk: number;
+  nama_toko: string;
+  kode_produk: string;
+  foto_produk: string;
+  status_produk: string;
+  id_toko: string;
+  alamat_toko: string;
+  disabled?: boolean;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
   isLoading,
   nama_produk,
   harga_produk,
@@ -19,6 +32,7 @@ const ProductCard: React.FC<any> = ({
   status_produk,
   id_toko,
   alamat_toko,
+  disabled = false,
 }) => {
   if (isLoading)
     return (
@@ -27,7 +41,7 @@ const ProductCard: React.FC<any> = ({
           whileHover={{ y: -4 }}
           className="product-card rounded-lg  w-[150px] md:w-[210px] "
         >
-          <Link href={isLoading ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
+          <div className="relative">
             <div className="image-container relative w-[150px] h-[200px] md:w-[210px]  md:h-[280px]  ">
               <Skeleton className="w-full h-full rounded-lg" />
             </div>
@@ -42,7 +56,7 @@ const ProductCard: React.FC<any> = ({
                 <Skeleton className="w-1/2 h-4" />
               </div>
             </div>
-          </Link>
+          </div>
         </motion.div>
       </>
     );
@@ -50,55 +64,62 @@ const ProductCard: React.FC<any> = ({
   return (
     <>
       <motion.div
-        whileHover={{ y: -4 }}
-        className="product-card rounded-lg w-[150px] md:w-[210px]"
+        whileHover={{ y: disabled ? 0 : -4 }}
+        className={`product-card rounded-lg w-[150px] md:w-[210px] ${
+          disabled ? 'pointer-events-none' : ''
+        }`}
       >
-        <Link href={isLoading ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
-          <div className="image-container relative w-[150px] h-[200px] md:w-[210px]  md:h-[280px]  ">
-            <Badge
-              variant={
-                _.includes(status_produk, 'Ready') ? 'highlight' : 'default'
-              }
-              className="absolute top-1 left-1 z-10"
-            >
-              {status_produk}
-            </Badge>
-            <Image
-              className="rounded-lg"
-              src={`${process.env.NEXT_PUBLIC_API_URL}/product_images/${foto_produk}`}
-              alt="Logo"
-              fill
-              objectFit="cover"
-              objectPosition="center"
-            />
-          </div>
-
-          <div className="text-container px-2">
-            <div className="product-store-container mt-2 flex items-center">
+        <div className="relative">
+          <Link href={disabled ? '' : `/catalogue/${id_toko}/${kode_produk}`}>
+            <div className="image-container relative w-[150px] h-[200px] md:w-[210px]  md:h-[280px]  ">
+              <Badge
+                variant={
+                  _.includes(status_produk, 'Ready') ? 'highlight' : 'default'
+                }
+                className="absolute top-1 left-1 z-10"
+              >
+                {status_produk}
+              </Badge>
               <Image
-                width={16}
-                height={16}
-                src={'/images/flower-sho-icon.png'}
-                alt="shop-icon"
+                className="rounded-lg"
+                src={`${process.env.NEXT_PUBLIC_API_URL}/product_images/${foto_produk}`}
+                alt="Logo"
+                fill
+                objectFit="cover"
+                objectPosition="center"
               />
-              <p className="product-store font-semibold text-primary text-xs">
-                {nama_toko}
-              </p>
+              {disabled && (
+                <div className="absolute inset-0 bg-gray-100 opacity-75 rounded-lg"></div>
+              )}
             </div>
-            <p className="product-name  text-gray-500 text-xs">
-              {shortenProductName(nama_produk)}
-            </p>
-            <p className="product-price text-lg mb-0 font-semibold text-secondary">
-              {rupiahFormatter(harga_produk)}
-            </p>
-            <div className="product-address-container flex items-center">
-              <Store size={12} color="#372947" />
-              <p className="ml-1 product-address  text-gray-500 text-xs">
-                {shortenProductName(alamat_toko)}
+
+            <div className="text-container px-2">
+              <div className="product-store-container mt-2 flex items-center">
+                <Image
+                  width={16}
+                  height={16}
+                  src={'/images/flower-sho-icon.png'}
+                  alt="shop-icon"
+                />
+                <p className="product-store font-semibold text-primary text-xs">
+                  {nama_toko}
+                </p>
+              </div>
+              <p className="product-name  text-gray-500 text-xs">
+                {shortenProductName(nama_produk)}
               </p>
+              <p className="product-price text-lg mb-0 font-semibold text-secondary">
+                {rupiahFormatter(harga_produk)}
+              </p>
+              <div className="product-address-container flex items-center">
+                <Store size={12} color="#372947" />
+                <p className="ml-1 product-address text-gray-500 text-xs">
+                  {shortenProductName(alamat_toko)}
+                </p>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </div>
       </motion.div>
     </>
   );

@@ -4,6 +4,7 @@ const API_KATALOG = `${BASE_API}/katalogs`;
 const API_PRODUCT_IMG = `${BASE_API}/product_images`;
 const API_ORDER = `${BASE_API}/order`;
 const API_TOKO = `${BASE_API}/toko`;
+const API_WISHLIST = `${BASE_API}/wishlist`;
 const API_KEY: any = process.env.API_KEY;
 const STORE_IMAGES = `${BASE_API}/store_images`;
 const HEADERS = {
@@ -21,4 +22,5 @@ export {
   API_KEY,
   HEADERS,
   API_PRODUCT_IMG,
+  API_WISHLIST,
 };

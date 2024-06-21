@@ -90,7 +90,18 @@ const Page = () => {
             {Array(10)
               .fill({})
               .map((product: ProductCardProps, index) => (
-                <ProductCard key={index} isLoading={true} />
+                <ProductCard
+                  key={index}
+                  isLoading={true}
+                  foto_produk={''}
+                  nama_produk={'test'}
+                  harga_produk={0}
+                  kode_produk={''}
+                  nama_toko={''}
+                  status_produk={''}
+                  id_toko={''}
+                  alamat_toko={''}
+                />
               ))}
           </>
         ) : (

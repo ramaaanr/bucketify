@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -29,10 +30,44 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
-import { MinusIcon, Notebook, NotebookPen, PlusIcon } from 'lucide-react';
+import {
+  ShoppingCart,
+  ArrowLeft,
+  MinusIcon,
+  Notebook,
+  NotebookPen,
+  PlusIcon,
+  Heart,
+  Star,
+  StarIcon,
+  HeartOff,
+} from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { STORE_IMAGES } from '@/config/kadobu-api';
 import { Textarea } from '@/components/ui/textarea';
+import { Separator } from '@/components/ui/separator';
+import CommentsList from '@/components/templates/comments-list';
+
+const comments = [
+  {
+    name: 'John Doe',
+    date: '2023-06-18',
+    text: 'Great product! Highly recommend it.',
+    rating: 5,
+  },
+  {
+    name: 'Jane Smith',
+    date: '2023-06-17',
+    text: 'Good value for the price.',
+    rating: 4,
+  },
+  {
+    name: 'Alice Johnson',
+    date: '2023-06-16',
+    text: 'Average quality, but fast shipping.',
+    rating: 3,
+  },
+];
 
 interface Product {
   nama_produk: string;
@@ -61,6 +96,30 @@ const Page = ({ params }: { params: Params }) => {
   const [quantity, setQuantity] = useState<number>(1);
   const [price, setPrice] = useState(0);
   const [note, setNote] = useState('');
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [liked, setLiked] = useState<any>(null);
+  const [isFetchLikeLoading, setIsFetchLikeLoading] = useState(true);
+
+  const handleAddToCart = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500); // Durasi animasi
+  };
+  const fetchIsLiked = async () => {
+    const res = await fetch(`/api/wishlists?kode_produk=${productCode}`, {
+      cache: 'no-cache',
+    });
+
+    if (!res.ok) {
+      setLiked(null);
+    } else {
+      const { result } = await res.json();
+      setLiked(result.id_wishlist);
+    }
+
+    setIsFetchLikeLoading(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -78,6 +137,7 @@ const Page = ({ params }: { params: Params }) => {
     };
 
     fetchData();
+    fetchIsLiked();
     return () => {};
   }, [productCode]);
 
@@ -132,53 +192,59 @@ const Page = ({ params }: { params: Params }) => {
     });
   };
 
+  const handleAddToWishlist = async () => {
+    const response = await fetch('/api/wishlists', {
+      method: 'POST',
+      body: JSON.stringify({ kode_produk: productCode || '' }),
+    });
+    if (response.ok) {
+      toast({
+        variant: 'default',
+        title: 'Wishlist',
+        description: 'Tambah Berhasil !!!',
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Wishlist',
+        description: 'Tambah Gagal !!!',
+      });
+    }
+    await fetchIsLiked();
+  };
+  const handleDeleteFromWishlist = async () => {
+    const response = await fetch(`/api/wishlists/${liked}`, {
+      method: 'DELETE',
+    });
+    if (response.ok) {
+      toast({
+        variant: 'default',
+        title: 'Wishlist',
+        description: 'Hapus Berhasil !!!',
+      });
+    } else {
+      toast({
+        variant: 'destructive',
+        title: 'Wishlist',
+        description: 'Hapus Gagal !!!',
+      });
+    }
+    await fetchIsLiked();
+  };
+
   if (!product) return <div>Loading</div>;
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              <Link
-                className="text-gray-400 hover:text-gray-500 cursor-pointer"
-                href="/catalogue"
-              >
-                Katalog
-              </Link>
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>
-              <Link
-                className="text-gray-400 hover:text-gray-500 cursor-pointer"
-                href={`/catalogue/${product.id_toko}`}
-              >
-                {product.nama_toko}
-              </Link>
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Produk</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-
-      <div className="detail-container px-24 py-4 flex">
-        <div className="image-container relative w-[345px] h-[460px]">
-          <Image
-            className="rounded-lg"
-            src={`${process.env.NEXT_PUBLIC_API_URL}/product_images/${product.foto_produk}`}
-            alt="Logo"
-            fill
-            objectFit="cover"
-            objectPosition="center"
-          />
-        </div>
-        <div className="text-container flex flex-col gap-y-2 w-[500px] px-8">
-          <div className="header-container">
+      <div className="max-w-md md:max-w-screen-xl mx-auto flex  flex-col md:justify-center md:flex-row  bg-white ">
+        <div className="image-container relative w-full md:w-[400px] h-[500px]">
+          <div className="absolute top-1 left-0 right-0 w-full z-10 flex justify-between p-2">
+            <div
+              onClick={() => router.back()}
+              className="p-1 rounded-md  hover:bg-slate-100"
+            >
+              <ArrowLeft size={36} color={'white'} className="shadow-md" />
+            </div>
             <Badge
               variant={
                 _.includes(product.status_produk, 'Ready')
@@ -188,33 +254,62 @@ const Page = ({ params }: { params: Params }) => {
             >
               {product.status_produk}
             </Badge>
-            <h1 className="text-4xl font-semibold">{product.nama_produk}</h1>
           </div>
-          <p className="text-xs text-gray-500">
-            {`Stok Produk: ${product.stok_produk}`}
+          <Image
+            src={`${process.env.NEXT_PUBLIC_API_URL}/product_images/${product.foto_produk}`}
+            alt="product-image"
+            fill
+            objectFit="cover"
+            objectPosition="center"
+          />
+        </div>
+        <div className="p-4">
+          <h2 className="text-3xl md:text-5xl font-semibold mb-2">
+            {product.nama_produk}
+          </h2>
+          <p className="text-2xl md:text-4xl font-bold text-gray-800 mb-4">
+            Rp {product.harga_produk.toLocaleString()}
           </p>
-          <Link
-            href={`/catalogue/${product.id_toko}`}
-            className="store-container flex flex-wrap items-center gap-x-2 px-2 rounded-lg hover:bg-gray-100 py-2"
-          >
-            <Avatar className="h-10 w-10">
-              <AvatarImage
-                src={`${STORE_IMAGES}/${product.foto_profil}`}
-                alt="@shadcn"
-              />
-              <AvatarFallback>{product.nama_toko}</AvatarFallback>
-            </Avatar>
-            <div className="sstore-detail ">
-              <p className="text-xl font-semibold">{product.nama_toko}</p>
-              <p className="text-xs">{product.alamat_toko}</p>
+          <p className="text-gray-700 mb-4">{product.deskripsi_produk}</p>
+          <Separator className="my-2" />
+          <div className="md:grid md:grid-cols-2 flex flex-col w-full">
+            <p className="text-gray-600 font-semibold col-span-2 mb-2">
+              Detail
+            </p>
+            <p className="text-gray-600 mb-2">Stok: {product.stok_produk}</p>
+            <p className="text-gray-600 mb-2">
+              Status: {product.status_produk}
+            </p>
+            <div className=" flex text-gray-600 gap-x-2 mb-2">
+              <p>Category</p> <Badge variant={'outline'}> Buket Kembang</Badge>
             </div>
-          </Link>
-          <p className="text-4xl font-bold">
-            {rupiahFormatter(product.harga_produk)}
-          </p>
+            <div className=" flex text-gray-600 gap-x-2 mb-2">
+              <p>Rating</p>{' '}
+              <Badge variant={'outline'} className="flex">
+                <StarIcon size={12} />
+                <p className="ml-1">4.8</p>
+              </Badge>
+            </div>
+          </div>
+          <div
+            className="flex items-center mt-4 rounded-md hover:bg-slate-50 "
+            onClick={() => router.push(`/catalogue/${product.id_toko}`)}
+          >
+            <Image
+              width={48}
+              height={48}
+              src={`${STORE_IMAGES}/${product.foto_profil}`}
+              alt={product.nama_toko}
+              className="w-12 h-12 rounded-full mr-4"
+            />
+            <div>
+              <h3 className="text-lg font-semibold">{product.nama_toko}</h3>
+              <p className="text-gray-600">{product.alamat_toko}</p>
+            </div>
+          </div>
           <Drawer>
             <DrawerTrigger asChild>
-              <Button>Buat Pesanan</Button>
+              <Button className="w-full my-3">Tambahkan ke Keranjang</Button>
             </DrawerTrigger>
             <DrawerContent>
               <div className="mx-auto w-full max-w-sm">
@@ -301,7 +396,7 @@ const Page = ({ params }: { params: Params }) => {
                   />
                 </div>
                 <DrawerFooter>
-                  <Button onClick={orderButton}>Bayar</Button>
+                  <Button onClick={orderButton}>Tambah keranjang</Button>
                   <DrawerClose asChild>
                     <Button variant="outline">Cancel</Button>
                   </DrawerClose>
@@ -309,11 +404,45 @@ const Page = ({ params }: { params: Params }) => {
               </div>
             </DrawerContent>
           </Drawer>
-          <p className="text-gray-600 text-sm">{product.deskripsi_produk}</p>
+          {isFetchLikeLoading ? (
+            <Button disabled variant={'outline'} className="w-full">
+              Loading
+            </Button>
+          ) : liked ? (
+            <Button
+              onClick={handleDeleteFromWishlist}
+              variant={'outline'}
+              className="w-full"
+            >
+              <HeartOff className="mr-2" size={24} />
+              <p>Hapus dari Wishlist</p>
+            </Button>
+          ) : (
+            <Button
+              onClick={handleAddToWishlist}
+              variant={'outline'}
+              className="w-full"
+            >
+              <Heart className="mr-2" size={24} />
+              <p>Tambahkan ke Wishlist</p>
+            </Button>
+          )}
+          <AnimatePresence>
+            {isAnimating && (
+              <motion.div
+                initial={{ opacity: 0, y: 0 }}
+                animate={{ opacity: 1, y: -500 }}
+                exit={{ opacity: 0, y: -1000 }}
+                transition={{ duration: 0.5 }}
+                className="fixed bottom-16 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-secondary rounded-full flex items-center justify-center"
+              >
+                <ShoppingCart size={36} className="text-white" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
-
-        <div id="snap-container"></div>
       </div>
+      <CommentsList comments={comments} />
     </>
   );
 };
