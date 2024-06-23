@@ -91,7 +91,7 @@ const Navbar = () => {
                   <Button
                     variant={'ghost'}
                     size={'icon'}
-                    onClick={() => router.push('/cart')}
+                    onClick={() => router.push('/carts')}
                   >
                     <ShoppingCart size={24} color="#372948" />
                   </Button>

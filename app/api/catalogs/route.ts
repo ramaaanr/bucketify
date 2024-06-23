@@ -9,12 +9,10 @@ export async function GET(request: Request) {
     if (find_product) {
       res = await fetch(`${BASE_API}/katalogs?cari=${find_product}`, {
         headers: HEADERS,
-        cache: 'no-cache',
       });
     } else {
       res = await fetch(`${BASE_API}/katalogs`, {
         headers: HEADERS,
-        cache: 'no-cache',
       });
     }
   } catch (error) {

@@ -4,10 +4,12 @@ import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const data = await request.json();
+  const { userId } = auth();
+
   const response = await fetch(`${API_ORDER}`, {
     method: 'POST',
     headers: HEADERS,
-    body: JSON.stringify(data),
+    body: JSON.stringify({ idPembeli: userId, ...data }),
   });
   const res = await response.json();
   const status = response.ok ? 200 : 400;

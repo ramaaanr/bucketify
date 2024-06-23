@@ -1,6 +1,6 @@
-'use client';
 import Navbar from '@/components/customer-nav-bar';
 import OrderBar from '@/components/templates/order-bar';
+import TopBar from '@/components/templates/top-bar';
 
 const CustomerLayout = ({
   children, // will be a page or nested layout
@@ -10,8 +10,9 @@ const CustomerLayout = ({
   return (
     <>
       <OrderBar />
+      <TopBar />
       <div className="spacing md:mt-16"></div>
-      <div className="main-container pb-16">{children}</div>
+      <div className="main-container ">{children}</div>
     </>
   );
 };

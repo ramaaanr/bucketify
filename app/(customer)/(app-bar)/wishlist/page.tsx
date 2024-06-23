@@ -13,6 +13,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Separator } from '@/components/ui/separator';
 import { BookHeart, Search, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import TopBar from '@/components/templates/top-bar';
 
 const Page = () => {
   const router = useRouter();
@@ -58,7 +59,8 @@ const Page = () => {
 
   return (
     <>
-      <div className="py-4 px-8 sm:px-16 md:px-28 lg:px-32">
+      <TopBar />
+      <div className="py-4 px-8 pt-8 md:pt-4 sm:px-16 md:px-28 lg:px-32">
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>

@@ -19,7 +19,7 @@ import BannerCarousel from '@/components/templates/banner-carousel';
 
 const Page = () => {
   const searchParams = useSearchParams();
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<ProductCardProps[]>([]);
   const [search, setSearch] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,9 +30,7 @@ const Page = () => {
         let res;
         const cari = searchParams.get('cari');
         if (cari) {
-          res = await fetch(`/api/catalogs?cari=${cari}`, {
-            cache: 'force-cache',
-          });
+          res = await fetch(`/api/catalogs?cari=${cari}`, {});
           setSearch(cari);
         } else {
           setSearch(null);
@@ -89,7 +87,7 @@ const Page = () => {
           <>
             {Array(10)
               .fill({})
-              .map((product: ProductCardProps, index) => (
+              .map((_, index) => (
                 <ProductCard
                   key={index}
                   isLoading={true}
@@ -104,6 +102,10 @@ const Page = () => {
                 />
               ))}
           </>
+        ) : data.length === 0 ? (
+          <div className="col-span-full text-center text-gray-500 mt-4">
+            Tidak ada produk yang ditemukan.
+          </div>
         ) : (
           <>
             {data.map((product: ProductCardProps) => (

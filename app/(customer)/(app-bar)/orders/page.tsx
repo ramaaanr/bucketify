@@ -1,123 +1,214 @@
 'use client';
-import { MoonLoader } from 'react-spinners';
+
 import React, { useState, useEffect } from 'react';
-import Order from '@/props/Order';
-import OrderCard from '@/components/order-card';
+import { MoonLoader } from 'react-spinners';
 import {
   Breadcrumb,
   BreadcrumbList,
   BreadcrumbItem,
-  BreadcrumbLink,
+  BreadcrumbPage,
 } from '@/components/ui/breadcrumb';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import Link from 'next/link';
-import { Separator } from '@/components/ui/separator';
+import { Toaster, toast } from 'sonner';
+import { ScrollText } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import PendingOrderItem from '@/components/organisms/pending-order-item';
+import OrderItem from '@/components/organisms/order-item';
+import { KeranjangItem } from '@/props/OrderProps';
+import useDebounce from '@/hooks/useDebounce'; // Make sure to implement/use a debounce hook
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
-  SelectGroup,
-  SelectLabel,
   SelectItem,
 } from '@/components/ui/select';
+import TopBar from '@/components/templates/top-bar';
+
+interface PendingOrder {
+  id_order: number;
+  kode_pesanan: string;
+  jenis_pembayaran: string | null;
+  status: string;
+  total_harga: number;
+  id_pembeli: string;
+  created_at: string;
+  snap_token: string;
+  keranjang: KeranjangItem[];
+}
+
+interface NonPendingOrder {
+  id_order: number;
+  id_keranjang: number;
+  created_at: string;
+  jumlah_pesanan: number;
+  total_harga: number;
+  catatan: string;
+  nama_produk: string;
+  foto_produk: string;
+  status_produk: string;
+  kode_produk: string;
+  id_toko: string;
+  nama_toko: string;
+}
+
 const Page = () => {
-  const [data, setData] = useState<Order[] | null>(null);
+  const router = useRouter();
+  const [pendingOrders, setPendingOrders] = useState<PendingOrder[] | null>(
+    null,
+  );
+  const [nonPendingOrders, setNonPendingOrders] = useState<
+    NonPendingOrder[] | null
+  >(null);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedStatus, setSelectedStatus] = useState<string>('');
+  const [filterStatus, setFilterStatus] = useState<string>('PENDING'); // Default filter status
+  const [searchTerm, setSearchTerm] = useState<string>(''); // State for search term
+  const debouncedSearchTerm = useDebounce(searchTerm, 500); // Debounce search term with 500ms delay
 
   const fetchData = async () => {
-    const response = await fetch('/api/orders');
-    const res = await response.json();
-    if (response.ok) {
-      const { data } = res;
-      setData(data);
-      setLoading(false);
-    } else {
-      setError(true);
-    }
-  };
-  const fetchDataByStatus = async (status: string) => {
     setLoading(true);
-    const response = await fetch(`/api/orders?status=${status}`);
-    const res = await response.json();
-    if (response.ok) {
-      const { data } = res;
-      setData(data);
-      setLoading(false);
-    } else {
+    setPendingOrders(null); // Clear pending orders
+    setNonPendingOrders(null); // Clear non-pending orders
+
+    try {
+      let response;
+      if (filterStatus === 'PENDING') {
+        response = await fetch(
+          `/api/orders?cari=${encodeURIComponent(debouncedSearchTerm)}`,
+        );
+      } else {
+        response = await fetch(
+          `/api/orders?status=${filterStatus}&cari=${encodeURIComponent(
+            debouncedSearchTerm,
+          )}`,
+        );
+      }
+      const res = await response.json();
+      if (response.ok) {
+        const { data } = res;
+        if (filterStatus === 'PENDING') {
+          setPendingOrders(data);
+        } else {
+          setNonPendingOrders(data);
+        }
+      } else {
+        setError(true);
+      }
+    } catch (err) {
       setError(true);
+    } finally {
+      setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [debouncedSearchTerm, filterStatus]); // Trigger fetch data when searchTerm or filterStatus changes
 
-  const filterStatusOnChange = async (value: any) => {
-    setSelectedStatus(value);
-    await fetchDataByStatus(value);
+  const handleFilterChange = (filterValue: string) => {
+    setFilterStatus(filterValue);
+  };
+
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   if (error) {
-    throw new Error('Halaman Order Bermasalah');
+    throw new Error('Halaman order Bermasalah');
   }
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink>
-              <Link href="/orders">Pesanan Anda</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <div className="order-container pb-8 pt-4 pr-20 gap-x-4 flex">
-        <Card className="h-fit w-52">
+      <TopBar />
+      <div className="py-4 px-8 sm:px-16 md:px-28 lg:px-32">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbPage>
+                <p>Pesanan Anda</p>
+              </BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+      <div className="order-container pb-8 pt-8 md:pt-4 px-4 gap-x-4 flex justify-center">
+        <Card className="sticky hidden md:block top-32 w-[400px] h-fit">
           <CardHeader>
-            <h2 className="text-sm">Filter Pesanan</h2>
-            <Separator />
+            <h2 className="font-semibold">Filter & Pencarian Pesanan</h2>
           </CardHeader>
           <CardContent>
-            <div className="filter-container">
-              <p className="font-semibold text-sm mb-2">Status</p>
-              <Select
-                onValueChange={filterStatusOnChange}
-                value={selectedStatus}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Pilih Status" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="Semuanya">semuanya</SelectItem>
-                    <SelectItem value="CANCELED">gagal</SelectItem>
-                    <SelectItem value="PENDING">belum bayar</SelectItem>
-                    <SelectItem value="ON_PROGRESS">diproses</SelectItem>
-                    <SelectItem value="READY">Siap Diambil</SelectItem>
-                    <SelectItem value="COMPLETED">selesai</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            <Label htmlFor="statusSelect">Status:</Label>
+            <Select
+              onValueChange={handleFilterChange}
+              defaultValue={filterStatus}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih status pesanan" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PENDING">Belum Dibayar</SelectItem>
+                <SelectItem value="PAID">Dibayar</SelectItem>
+                <SelectItem value="CANCELED">Dibatalkan</SelectItem>
+                <SelectItem value="ACCEPT">Diterima</SelectItem>
+                <SelectItem value="ON_PROGRESS">Diproses</SelectItem>
+                <SelectItem value="READY">Siap Diambil</SelectItem>
+                <SelectItem value="COMPLETE">Selesai</SelectItem>
+              </SelectContent>
+            </Select>
+            <Label htmlFor="inputCari">Cari:</Label>
+            <Input
+              id="inputCari"
+              type="text"
+              placeholder="Cari pesanan..."
+              value={searchTerm}
+              onChange={handleSearchInputChange}
+            />
           </CardContent>
         </Card>
-        <div className="order-card-container w-full mx-auto space-y-4">
-          {!loading ? (
-            data ? (
-              data.map((order) => (
-                <OrderCard key={order.id_order} data={order} />
-              ))
-            ) : (
-              ''
-            )
-          ) : (
+
+        {loading ? (
+          <div className="w-1/2">
             <MoonLoader className="mx-auto mt-16" color="#fc5c64" />
-          )}
-        </div>
+          </div>
+        ) : filterStatus === 'PENDING' ? (
+          pendingOrders && pendingOrders.length > 0 ? (
+            <div className="order-card-container w-full md:w-1/2 pb-32 space-y-4">
+              {pendingOrders.map((order) => (
+                <PendingOrderItem key={order.id_order} data={order} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center w-full md:max-w-[693px]">
+              <div className="text-center">
+                <ScrollText size={64} className="mx-auto" />
+                <p className="mt-4 text-gray-500 text-lg">
+                  Anda Belum Memiliki Pesanan
+                </p>
+              </div>
+            </div>
+          )
+        ) : nonPendingOrders && nonPendingOrders.length > 0 ? (
+          <div className="order-card-container w-full md:w-1/2 pb-32 space-y-4">
+            {nonPendingOrders.map((order) => (
+              <OrderItem isDisabled={false} key={order.id_order} data={order} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex items-center justify-center w-full md:max-w-[693px]">
+            <div className="text-center">
+              <ScrollText size={64} className="mx-auto" />
+              <p className="mt-4 text-gray-500 text-lg">
+                Anda Belum Memiliki Pesanan
+              </p>
+            </div>
+          </div>
+        )}
       </div>
+
+      <Toaster position="top-right" />
     </>
   );
 };

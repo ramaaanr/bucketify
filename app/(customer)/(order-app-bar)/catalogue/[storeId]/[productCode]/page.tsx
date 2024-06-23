@@ -18,7 +18,7 @@ import { useAuth } from '@clerk/nextjs';
 import _ from 'lodash';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   Drawer,
@@ -89,6 +89,7 @@ interface Params {
 
 const Page = ({ params }: { params: Params }) => {
   const router = useRouter();
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
   const { toast } = useToast();
   const { isLoaded, userId } = useAuth();
   const { storeId, productCode } = params;
@@ -164,12 +165,11 @@ const Page = ({ params }: { params: Params }) => {
     const formData = {
       idPembeli: userId,
       kodeProduk: productCode,
-      keterangan: 'Menunggu Pembayaran',
-      totalPesanan: quantity.toString(),
+      jumlahPesanan: quantity.toString(),
       catatan: note || ' ',
     };
 
-    const response = await fetch(`/api/orders`, {
+    const response = await fetch(`/api/carts`, {
       method: 'POST',
       body: JSON.stringify(formData),
     });
@@ -177,19 +177,21 @@ const Page = ({ params }: { params: Params }) => {
     if (!response.ok) {
       toast({
         variant: 'destructive',
-        title: 'Pesan Gagal',
-        description: 'Anda tidak bisa memesan produk',
+        title: 'Pesanan Gagal Ditambahkan Ke Keranjang',
+        description: 'Pesanan Gagal Ditambahkan Ke Keranjang',
       });
       return null;
     }
 
-    const res = await response.json();
-    router.push(`/orders/checkout/${res.data.snap_token}`);
+    if (cancelButtonRef.current) {
+      cancelButtonRef.current.click();
+    }
     toast({
       variant: 'default',
-      title: 'Pesan Berhasil',
-      description: 'Pesanan anda berhasil',
+      title: 'Pesanan Berhasil Ditambahkan Ke Keranjang',
+      description: 'Pesanan Berhasil Ditambahkan Ke Keranjang',
     });
+    handleAddToCart();
   };
 
   const handleAddToWishlist = async () => {
@@ -314,7 +316,7 @@ const Page = ({ params }: { params: Params }) => {
             <DrawerContent>
               <div className="mx-auto w-full max-w-sm">
                 <DrawerHeader>
-                  <DrawerTitle>Checkout Pesanan Anda</DrawerTitle>
+                  <DrawerTitle>Tambahkan Pesanan Ke Keranjang Anda</DrawerTitle>
                   <DrawerDescription>
                     Isi Jumlah Pesanan terlebih dahulu
                   </DrawerDescription>
@@ -395,15 +397,31 @@ const Page = ({ params }: { params: Params }) => {
                     className="resize-none"
                   />
                 </div>
+
                 <DrawerFooter>
                   <Button onClick={orderButton}>Tambah keranjang</Button>
                   <DrawerClose asChild>
-                    <Button variant="outline">Cancel</Button>
+                    <Button ref={cancelButtonRef} variant="outline">
+                      Cancel
+                    </Button>
                   </DrawerClose>
                 </DrawerFooter>
               </div>
             </DrawerContent>
           </Drawer>
+          <AnimatePresence>
+            {isAnimating && (
+              <motion.div
+                initial={{ opacity: 0, y: 0 }}
+                animate={{ opacity: 1, y: -500 }}
+                exit={{ opacity: 0, y: -1000 }}
+                transition={{ duration: 0.7 }}
+                className="fixed bottom-16 left-1/2 transform -translate-x-1/2 w-20 z-[100] h-20 bg-primary rounded-full flex items-center justify-center"
+              >
+                <ShoppingCart size={36} className="text-white" />
+              </motion.div>
+            )}
+          </AnimatePresence>
           {isFetchLikeLoading ? (
             <Button disabled variant={'outline'} className="w-full">
               Loading
@@ -427,19 +445,6 @@ const Page = ({ params }: { params: Params }) => {
               <p>Tambahkan ke Wishlist</p>
             </Button>
           )}
-          <AnimatePresence>
-            {isAnimating && (
-              <motion.div
-                initial={{ opacity: 0, y: 0 }}
-                animate={{ opacity: 1, y: -500 }}
-                exit={{ opacity: 0, y: -1000 }}
-                transition={{ duration: 0.5 }}
-                className="fixed bottom-16 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-secondary rounded-full flex items-center justify-center"
-              >
-                <ShoppingCart size={36} className="text-white" />
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
       <CommentsList comments={comments} />

@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={`${poppins.className} overflow-x-hidden`}>
+        <body className={`${poppins.className} overflow-x-hidden `}>
           {children}
           <Toaster />
         </body>
