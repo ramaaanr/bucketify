@@ -25,6 +25,7 @@ interface OrderItemProps {
     foto_produk: string;
     status_produk: string;
     kode_produk: string;
+    kode_pesanan: string;
     id_toko: string;
     nama_toko: string;
   };
@@ -34,6 +35,7 @@ interface OrderItemProps {
 const OrderItem: React.FC<OrderItemProps> = ({ data, isDisabled }) => {
   const {
     id_order,
+    kode_pesanan,
     created_at,
     jumlah_pesanan,
     total_harga,
@@ -51,7 +53,7 @@ const OrderItem: React.FC<OrderItemProps> = ({ data, isDisabled }) => {
       <CardHeader className="w-full">
         <div className="flex card-header items-center w-full gap-x-2">
           <Gift color="#fc5c64" />
-          <p className="font-semibold">{kode_produk}</p>
+          <p className="font-semibold">{kode_pesanan}</p>
 
           <p className="font-medium">{dateFormatter(created_at)}</p>
           <Badge

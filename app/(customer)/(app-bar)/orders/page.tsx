@@ -42,6 +42,7 @@ interface PendingOrder {
 interface NonPendingOrder {
   id_order: number;
   id_keranjang: number;
+  kode_pesanan: string;
   created_at: string;
   jumlah_pesanan: number;
   total_harga: number;
@@ -134,8 +135,8 @@ const Page = () => {
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div className="order-container pb-8 pt-8 md:pt-4 px-4 gap-x-4 flex justify-center">
-        <Card className="sticky hidden md:block top-32 w-[400px] h-fit">
+      <div className="order-container pb-8 pt-8 md:pt-4 px-4 gap-x-4 flex flex-col md:flex-row justify-center">
+        <Card className="md:sticky  md:top-32 w-full mb-4 md:w-[400px] h-fit">
           <CardHeader>
             <h2 className="font-semibold">Filter & Pencarian Pesanan</h2>
           </CardHeader>

@@ -3,16 +3,24 @@ import { HEADERS, BASE_API } from '@/config/kadobu-api';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const find_product = searchParams.get('cari');
+  const category = searchParams.get('category');
 
   let res;
   try {
     if (find_product) {
       res = await fetch(`${BASE_API}/katalogs?cari=${find_product}`, {
         headers: HEADERS,
+        cache: 'no-cache',
+      });
+    } else if (category) {
+      res = await fetch(`${BASE_API}/katalogs?category=${category}`, {
+        headers: HEADERS,
+        cache: 'no-cache',
       });
     } else {
       res = await fetch(`${BASE_API}/katalogs`, {
         headers: HEADERS,
+        cache: 'no-cache',
       });
     }
   } catch (error) {

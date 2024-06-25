@@ -1,5 +1,6 @@
 'use client';
 
+import TopBar from '@/components/templates/top-bar';
 import {
   Breadcrumb,
   BreadcrumbList,

@@ -1,6 +1,7 @@
 import { MoreVertical } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 
 interface CategoryCard {
   type: string;
@@ -20,21 +21,32 @@ function formatString(input: string) {
 }
 
 const CategoryCard: React.FC<CategoryCard> = ({ type }) => {
+  const searchParams = useSearchParams();
+
+  const category = searchParams.get('category');
+  const isActive = category === type;
+
   return (
     <>
       <Link
-        href={`/catalogues?category=${type}`}
-        className="cursor-pointer p-2 hover:bg-gray-100 md:hidden rounded-md text-center w-fit h-fit flex flex-col items-center justify-center"
+        href={`/catalogue?category=${type}`}
+        className={`cursor-pointer p-2 hover:bg-gray-100 md:hidden rounded-md text-center w-fit h-fit flex flex-col items-center justify-center ${
+          isActive ? 'bg-gray-200' : ''
+        }`}
       >
-        <div className="category-card  h-fit w-fit flex border border-gray-100 p-2 shadow-sm rounded-md">
-          {type === 'lain-lain' ? (
+        <div
+          className={`category-card h-fit w-fit flex border border-gray-100 p-2 shadow-sm rounded-md ${
+            isActive ? 'border-gray-400' : ''
+          }`}
+        >
+          {type === 'lainnya' ? (
             <MoreVertical size={24} color="#372947" />
           ) : (
             <Image
               className="mr-1"
               width={24}
               height={24}
-              src={`/images/${type}.svg`}
+              src={`/images/buket-${type}.svg`}
               alt={type}
             />
           )}
@@ -43,21 +55,25 @@ const CategoryCard: React.FC<CategoryCard> = ({ type }) => {
       </Link>
 
       <Link
-        href={`/catalogues?category=${type}`}
-        className="category-card cursor-pointer hidden sm:hidden md:flex hover:bg-gray-100/50 border border-gray-100 p-2 shadow-sm rounded-md"
+        href={`/catalogue?category=${type}`}
+        className={`category-card cursor-pointer hidden sm:hidden md:flex hover:bg-gray-100/50 border border-gray-100 p-2 shadow-sm rounded-md ${
+          isActive ? 'bg-gray-200' : ''
+        }`}
       >
-        {type === 'lain-lain' ? (
+        {type === 'lainnya' ? (
           ''
         ) : (
           <Image
             className="mr-1"
             width={24}
             height={24}
-            src={`/images/${type}.svg`}
+            src={`/images/buket-${type}.svg`}
             alt={type}
           />
         )}
-        <p className="text-gray-400">{formatString(type)}</p>
+        <p className={`text-gray-400 ${isActive ? 'font-bold' : ''}`}>
+          {formatString(type)}
+        </p>
       </Link>
     </>
   );

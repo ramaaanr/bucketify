@@ -12,6 +12,7 @@ export default function TopBar() {
   const getPageTitle = () => {
     if (pathname.includes('carts')) return 'Keranjang';
     if (pathname.includes('wishlist')) return 'Wishlist';
+    if (pathname.includes('orders/checkout')) return 'Checkout';
     if (pathname.includes('orders')) return 'Pesanan';
     return 'Kembali'; // Default title
   };

@@ -71,6 +71,7 @@ const comments = [
 
 interface Product {
   nama_produk: string;
+  nama_kategori: string;
   harga_produk: number;
   deskripsi_produk: string;
   stok_produk: number;
@@ -258,6 +259,7 @@ const Page = ({ params }: { params: Params }) => {
             </Badge>
           </div>
           <Image
+            className="md:rounded-lg"
             src={`${process.env.NEXT_PUBLIC_API_URL}/product_images/${product.foto_produk}`}
             alt="product-image"
             fill
@@ -265,7 +267,7 @@ const Page = ({ params }: { params: Params }) => {
             objectPosition="center"
           />
         </div>
-        <div className="p-4">
+        <div className="p-4 w-full md:w-[450px]">
           <h2 className="text-3xl md:text-5xl font-semibold mb-2">
             {product.nama_produk}
           </h2>
@@ -283,7 +285,10 @@ const Page = ({ params }: { params: Params }) => {
               Status: {product.status_produk}
             </p>
             <div className=" flex text-gray-600 gap-x-2 mb-2">
-              <p>Category</p> <Badge variant={'outline'}> Buket Kembang</Badge>
+              <p>Category</p>{' '}
+              <Badge variant={'outline'}>
+                {product.nama_kategori.toUpperCase()}
+              </Badge>
             </div>
             <div className=" flex text-gray-600 gap-x-2 mb-2">
               <p>Rating</p>{' '}
@@ -294,7 +299,7 @@ const Page = ({ params }: { params: Params }) => {
             </div>
           </div>
           <div
-            className="flex items-center mt-4 rounded-md hover:bg-slate-50 "
+            className="flex items-center mt-4 p-2 hover:cursor-pointer rounded-lg bg-slate-50 hover:bg-slate-100 "
             onClick={() => router.push(`/catalogue/${product.id_toko}`)}
           >
             <Image

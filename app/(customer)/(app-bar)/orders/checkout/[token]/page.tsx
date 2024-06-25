@@ -1,5 +1,6 @@
 'use client';
 
+import TopBar from '@/components/templates/top-bar';
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -50,21 +51,25 @@ export default function Page({ params }: { params: Params }) {
 
   return (
     <>
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbLink>
-              <Link href="/orders">Pesanan Anda</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>Pembayaran</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-      <div className="checkout-container mt-4 w-full pr-16">
-        <div className="w-full" id="snap-container"></div>
+      <TopBar />
+      <div className="py-4 px-8 sm:px-16 md:px-28 lg:px-32">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink>
+                <Link href="/orders">Pesanan Anda</Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>Pembayaran</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+      </div>
+
+      <div className="checkout-container mt-6 w-full min-h-screen">
+        <div className="mx-auto w-full max-w-4xl" id="snap-container"></div>
       </div>
     </>
   );

@@ -1,12 +1,12 @@
 import CategoryCard from '../organisms/category-card';
 const kategori = [
-  'buket-balon',
-  'buket-uang',
-  'buket-boneka',
-  'buket-bunga',
-  'buket-foto',
-  'buket-snack',
-  'lain-lain',
+  'balon',
+  'uang',
+  'boneka',
+  'bunga',
+  'foto',
+  'snack',
+  'lainnya',
 ];
 
 export default function CategoryContainer() {

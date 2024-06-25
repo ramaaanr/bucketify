@@ -19,20 +19,24 @@ export async function GET(request: Request) {
   const { userId } = auth();
   const { searchParams } = new URL(request.url);
   const status_pesanan = searchParams.get('status');
+  const kode_pesanan = searchParams.get('cari');
   let response: any;
   if (status_pesanan) {
     response = await fetch(
-      `${API_ORDER}?userId=${userId}&status=${status_pesanan}`,
+      `${API_ORDER}?userId=${userId}&status=${status_pesanan}&cari=${kode_pesanan}`,
       {
         headers: HEADERS,
         cache: 'default',
       },
     );
   } else {
-    response = await fetch(`${API_ORDER}?userId=${userId}`, {
-      headers: HEADERS,
-      cache: 'default',
-    });
+    response = await fetch(
+      `${API_ORDER}?userId=${userId}&cari=${kode_pesanan}`,
+      {
+        headers: HEADERS,
+        cache: 'default',
+      },
+    );
   }
 
   const res = await response.json();

@@ -45,13 +45,13 @@ const Navbar = () => {
     <>
       <AppBar />
       <motion.nav
-        className="navbar hidden md:block navbar-expand-lg navbar-light bg-white  
-     pl-12 lg:pl-24 pr-40 shadow-sm py-2  fixed top-0 left-0 right-0 z-20 "
+        className="navbar block navbar-expand-lg navbar-light bg-white  
+     md:pl-12 lg:pl-24 md:pr-40 shadow-md py-2  fixed top-0 left-0 right-0 z-20 "
       >
-        <div className="nav-content-container flex gap-x-2 sm:gap-x-4 md:gap-x-8">
-          <div className="nav-logo w-fit hidden md:block">
+        <div className="nav-content-container flex px-8 gap-x-2 sm:gap-x-4 md:gap-x-8">
+          <div className="nav-logo w-fit ">
             <a
-              className={`${dsd.className} pl-12 text-3xl text-secondary`}
+              className={`${dsd.className}  text-3xl mr-2 text-secondary`}
               href="/"
             >
               Kadobu
@@ -69,10 +69,10 @@ const Navbar = () => {
               onChange={(e) => setSearch(e.target.value)}
               type="search"
               placeholder="Search..."
-              className="w-80 rounded-lg bg-background pl-8"
+              className="w-full md:w-80 rounded-lg bg-background pl-8"
             />
           </div>
-          <div className="nav-action w-fit justify-end flex  gap-x-2">
+          <div className="nav-action w-fit justify-end hidden md:flex  gap-x-2">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>

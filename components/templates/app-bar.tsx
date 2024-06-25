@@ -19,12 +19,14 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({ icon, label, path }) => {
   const router = useRouter();
-  const isActive = usePathname() === path;
+  const isActive = usePathname().includes(path);
 
   return (
     <div
-      className={`flex flex-col rounded-lg p-2 items-center justify-center hover:bg-primary/10 text-gray-700 cursor-pointer hover:text-gray-900 ${
-        isActive ? 'bg-primary/20 text-white  font-semibold' : ''
+      className={`flex flex-col rounded-full p-4 items-center justify-center hover:bg-primary/80 text-gray-700 cursor-pointer hover:text-gray-900 ${
+        isActive
+          ? 'bg-primary text-white hover:text-slate-50 font-semibold'
+          : ''
       }`}
       onClick={() => router.push(path)}
     >
@@ -35,8 +37,8 @@ const MenuItem: React.FC<MenuItemProps> = ({ icon, label, path }) => {
 
 const AppBar: React.FC = () => {
   return (
-    <div className="fixed bottom-0 border-t border-t-gray-200 py-2 left-0 right-0 bg-white shadow-lg z-20">
-      <div className="flex md:hidden justify-around items-center h-16">
+    <div className="fixed block md:hidden bottom-0 border-t-2 pb-3 border-t-gray-200 py-2 left-0 right-0 bg-white shadow-lg z-20">
+      <div className="flex  justify-around items-center h-16">
         <MenuItem
           icon={<ShoppingCart size={32} />}
           label="Carts"
