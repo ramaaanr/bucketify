@@ -13,6 +13,11 @@ module.exports = {
         port: '3002',
         pathname: '/store_images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
+        pathname: '/**',
+      },
     ],
   },
 };

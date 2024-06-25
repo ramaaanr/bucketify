@@ -12,6 +12,10 @@ import Image from 'next/image';
 import { API_PRODUCT_IMG } from '@/config/kadobu-api';
 import { Badge } from '../ui/badge';
 import _ from 'lodash';
+import CommentDialog from './comment-dialog';
+import { useState } from 'react';
+import { Button } from '../ui/button';
+import { toast } from 'sonner';
 
 interface OrderItemProps {
   data: {
@@ -28,6 +32,8 @@ interface OrderItemProps {
     kode_pesanan: string;
     id_toko: string;
     nama_toko: string;
+    status_keranjang: string;
+    id_komen: number;
   };
   isDisabled: boolean;
 }
@@ -36,6 +42,8 @@ const OrderItem: React.FC<OrderItemProps> = ({ data, isDisabled }) => {
   const {
     id_order,
     kode_pesanan,
+    id_keranjang,
+    status_keranjang,
     created_at,
     jumlah_pesanan,
     total_harga,
@@ -46,7 +54,33 @@ const OrderItem: React.FC<OrderItemProps> = ({ data, isDisabled }) => {
     kode_produk,
     id_toko,
     nama_toko,
+    id_komen,
   } = data;
+  const [idKomen, setIdKomen] = useState<string | null | number>(id_komen);
+
+  const [commentSubmitted, setCommentSubmitted] = useState(!!id_komen);
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`/api/comment/${idKomen}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        toast.success('Komentar berhasil dihapus!');
+        setIdKomen(null);
+        setCommentSubmitted(!commentSubmitted);
+      } else {
+        toast.error('Gagal menghapus komentar');
+      }
+    } catch (error) {
+      toast.error('An error occurred while deleting the comment');
+    }
+  };
+
+  const handleCommentSubmitted = (id_komen: string) => {
+    setIdKomen(id_komen);
+    setCommentSubmitted(!commentSubmitted);
+  };
 
   return (
     <Card>
@@ -107,6 +141,21 @@ const OrderItem: React.FC<OrderItemProps> = ({ data, isDisabled }) => {
               <span className="font-semibold mr-1">Catatan:</span>
               {catatan}
             </div>
+            {status_keranjang === 'COMPLETE' ? (
+              commentSubmitted ? (
+                <Button variant="outline" onClick={handleDelete}>
+                  Hapus Ulasan
+                </Button>
+              ) : (
+                <CommentDialog
+                  cartId={id_keranjang}
+                  commentId={id_komen}
+                  onCommentSubmitted={handleCommentSubmitted}
+                />
+              )
+            ) : (
+              ''
+            )}
           </div>
         </div>
       </CardFooter>

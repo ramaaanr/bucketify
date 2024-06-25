@@ -53,6 +53,8 @@ interface NonPendingOrder {
   kode_produk: string;
   id_toko: string;
   nama_toko: string;
+  status_keranjang: string;
+  id_komen: number;
 }
 
 const Page = () => {
@@ -171,7 +173,7 @@ const Page = () => {
         </Card>
 
         {loading ? (
-          <div className="w-1/2">
+          <div className="w-full md:w-[680px]">
             <MoonLoader className="mx-auto mt-16" color="#fc5c64" />
           </div>
         ) : filterStatus === 'PENDING' ? (
@@ -209,7 +211,7 @@ const Page = () => {
         )}
       </div>
 
-      <Toaster position="top-right" />
+      <Toaster position="top-right" richColors />
     </>
   );
 };

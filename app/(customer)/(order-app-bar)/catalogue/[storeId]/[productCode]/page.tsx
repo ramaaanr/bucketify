@@ -47,27 +47,16 @@ import { STORE_IMAGES } from '@/config/kadobu-api';
 import { Textarea } from '@/components/ui/textarea';
 import { Separator } from '@/components/ui/separator';
 import CommentsList from '@/components/templates/comments-list';
+import MoonLoader from 'react-spinners/MoonLoader';
+import { CommentProps } from 'postcss';
 
-const comments = [
-  {
-    name: 'John Doe',
-    date: '2023-06-18',
-    text: 'Great product! Highly recommend it.',
-    rating: 5,
-  },
-  {
-    name: 'Jane Smith',
-    date: '2023-06-17',
-    text: 'Good value for the price.',
-    rating: 4,
-  },
-  {
-    name: 'Alice Johnson',
-    date: '2023-06-16',
-    text: 'Average quality, but fast shipping.',
-    rating: 3,
-  },
-];
+interface Comment {
+  username: string;
+  created_at: string;
+  text: string;
+  rating: number;
+  id_pembeli: string;
+}
 
 interface Product {
   nama_produk: string;
@@ -100,6 +89,7 @@ const Page = ({ params }: { params: Params }) => {
   const [note, setNote] = useState('');
   const [isAnimating, setIsAnimating] = useState(false);
   const [liked, setLiked] = useState<any>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
   const [isFetchLikeLoading, setIsFetchLikeLoading] = useState(true);
 
   const handleAddToCart = () => {
@@ -137,8 +127,21 @@ const Page = ({ params }: { params: Params }) => {
       setProduct(data);
       setPrice(data.harga_produk);
     };
+    const fetchComments = async () => {
+      const res = await fetch(`/api/comment?kode_produk=${productCode}`, {
+        cache: 'no-cache',
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to fetch data');
+      }
+
+      const { results } = await res.json();
+      setComments(results);
+    };
 
     fetchData();
+    fetchComments();
     fetchIsLiked();
     return () => {};
   }, [productCode]);
@@ -235,7 +238,12 @@ const Page = ({ params }: { params: Params }) => {
     await fetchIsLiked();
   };
 
-  if (!product) return <div>Loading</div>;
+  if (!product)
+    return (
+      <div className="w-full">
+        <MoonLoader className="mx-auto mt-32" color="#fc5c64" />
+      </div>
+    );
 
   return (
     <>
@@ -293,8 +301,22 @@ const Page = ({ params }: { params: Params }) => {
             <div className=" flex text-gray-600 gap-x-2 mb-2">
               <p>Rating</p>{' '}
               <Badge variant={'outline'} className="flex">
-                <StarIcon size={12} />
-                <p className="ml-1">4.8</p>
+                {comments.length > 0 ? (
+                  <>
+                    <StarIcon size={12} />
+                    <p className="ml-1">
+                      {comments.length > 0
+                        ? comments.reduce(
+                            (sum, comment) => sum + comment.rating,
+                            0,
+                          ) / comments.length
+                        : 0}{' '}
+                      {` (${comments.length}) Ulasan`}
+                    </p>
+                  </>
+                ) : (
+                  <p className="ml-1">Belum Ada Ulasan</p>
+                )}
               </Badge>
             </div>
           </div>
@@ -427,28 +449,32 @@ const Page = ({ params }: { params: Params }) => {
               </motion.div>
             )}
           </AnimatePresence>
-          {isFetchLikeLoading ? (
-            <Button disabled variant={'outline'} className="w-full">
-              Loading
-            </Button>
-          ) : liked ? (
-            <Button
-              onClick={handleDeleteFromWishlist}
-              variant={'outline'}
-              className="w-full"
-            >
-              <HeartOff className="mr-2" size={24} />
-              <p>Hapus dari Wishlist</p>
-            </Button>
+          {userId ? (
+            isFetchLikeLoading ? (
+              <Button disabled variant={'outline'} className="w-full">
+                Loading
+              </Button>
+            ) : liked ? (
+              <Button
+                onClick={handleDeleteFromWishlist}
+                variant={'outline'}
+                className="w-full"
+              >
+                <HeartOff className="mr-2" size={24} />
+                <p>Hapus dari Wishlist</p>
+              </Button>
+            ) : (
+              <Button
+                onClick={handleAddToWishlist}
+                variant={'outline'}
+                className="w-full"
+              >
+                <Heart className="mr-2" size={24} />
+                <p>Tambahkan ke Wishlist</p>
+              </Button>
+            )
           ) : (
-            <Button
-              onClick={handleAddToWishlist}
-              variant={'outline'}
-              className="w-full"
-            >
-              <Heart className="mr-2" size={24} />
-              <p>Tambahkan ke Wishlist</p>
-            </Button>
+            ''
           )}
         </div>
       </div>
