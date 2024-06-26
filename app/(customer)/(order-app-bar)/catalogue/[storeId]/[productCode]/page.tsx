@@ -133,7 +133,7 @@ const Page = ({ params }: { params: Params }) => {
       });
 
       if (!res.ok) {
-        throw new Error('Failed to fetch data');
+        return;
       }
 
       const { results } = await res.json();
@@ -282,7 +282,6 @@ const Page = ({ params }: { params: Params }) => {
           <p className="text-2xl md:text-4xl font-bold text-gray-800 mb-4">
             Rp {product.harga_produk.toLocaleString()}
           </p>
-          <p className="text-gray-700 mb-4">{product.deskripsi_produk}</p>
           <Separator className="my-2" />
           <div className="md:grid md:grid-cols-2 flex flex-col w-full">
             <p className="text-gray-600 font-semibold col-span-2 mb-2">
@@ -478,6 +477,11 @@ const Page = ({ params }: { params: Params }) => {
           )}
         </div>
       </div>
+      <div className="max-w-md md:max-w-screen-lg px-4 md:px-8 lg:px-20 mx-auto md:justify-center bg-white ">
+        <p className="font-semibold text-primary">Deskripsi Produk</p>
+        <p className="text-gray-700 mb-4">{product.deskripsi_produk}</p>
+      </div>
+
       <CommentsList comments={comments} />
     </>
   );

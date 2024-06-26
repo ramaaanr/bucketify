@@ -160,7 +160,7 @@ const Page = () => {
             ))}
           </div>
         ) : (
-          <div className="flex items-center justify-center w-full md:w-72">
+          <div className="flex items-center mt-16 justify-center w-full md:w-72">
             <div className="text-center">
               <ShoppingCart size={64} className="mx-auto" />
               <p className="mt-4 text-gray-500 text-lg">

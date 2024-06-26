@@ -4,9 +4,6 @@ import { NextResponse } from 'next/server';
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const kode_produk = searchParams.get('kode_produk');
-  const { userId } = auth();
-  if (!userId)
-    return NextResponse.json({ msg: 'not-allowed' }, { status: 400 });
 
   const response = await fetch(`${API_KOMEN}?kode_produk=${kode_produk}`, {
     method: 'GET',

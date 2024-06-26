@@ -7,6 +7,7 @@ const kategori = [
   'foto',
   'snack',
   'lainnya',
+  'all',
 ];
 
 export default function CategoryContainer() {

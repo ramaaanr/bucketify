@@ -1,4 +1,4 @@
-import { MoreVertical } from 'lucide-react';
+import { Flower2, MoreVertical } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -29,7 +29,7 @@ const CategoryCard: React.FC<CategoryCard> = ({ type }) => {
   return (
     <>
       <Link
-        href={`/catalogue?category=${type}`}
+        href={type === 'reset' ? `/catalogue` : `/catalogue?category=${type}`}
         className={`cursor-pointer p-2 hover:bg-gray-100 md:hidden rounded-md text-center w-fit h-fit flex flex-col items-center justify-center ${
           isActive ? 'bg-gray-200' : ''
         }`}
@@ -41,6 +41,8 @@ const CategoryCard: React.FC<CategoryCard> = ({ type }) => {
         >
           {type === 'lainnya' ? (
             <MoreVertical size={24} color="#372947" />
+          ) : type === 'all' ? (
+            <Flower2 size={24} color="#372947" />
           ) : (
             <Image
               className="mr-1"
@@ -55,12 +57,12 @@ const CategoryCard: React.FC<CategoryCard> = ({ type }) => {
       </Link>
 
       <Link
-        href={`/catalogue?category=${type}`}
+        href={type === 'reset' ? `/catalogue` : `/catalogue?category=${type}`}
         className={`category-card cursor-pointer hidden sm:hidden md:flex hover:bg-gray-100/50 border border-gray-100 p-2 shadow-sm rounded-md ${
           isActive ? 'bg-gray-200' : ''
         }`}
       >
-        {type === 'lainnya' ? (
+        {type === 'lainnya' || type === 'all' ? (
           ''
         ) : (
           <Image
